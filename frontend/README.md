@@ -2,7 +2,7 @@
 # Tecnologias
 - React 19+
 - Vite 6+
-
+- Tailwindcss 4.1+
 ## Instalacion
 1. Clonar el repositorio
 ```
