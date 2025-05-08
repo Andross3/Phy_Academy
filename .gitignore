@@ -7,7 +7,10 @@
 # Ignorar todos los directorios _pycache_
 __pycache__/
 **/*.pyc
+*.pyo
 # Archivos de entorno
 .env
 # Archivos del sistema
 .DS_Store
+# Archivos log
+*.log
