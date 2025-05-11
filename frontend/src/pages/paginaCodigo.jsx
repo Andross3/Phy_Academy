@@ -18,7 +18,9 @@ const PaginaCodigo = () => {
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Página Código</h1>
       <p className="mb-6">Bienvenido a la página donde mostramos código y ejemplos.</p>
+      <div className="flex justify-end">
       <BotonCompilar onCompilar={manejarCompilacion} />
+      </div>
       {/* Aquí se muestra el resultado de la compilación */}
       <ResultadoCompilacion resultado={resultado} />
     </div>
