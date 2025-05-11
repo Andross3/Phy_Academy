@@ -1,21 +1,14 @@
 import React from 'react';
 
-function BotonCompilar() {
+const BotonCompilar = ({ onCompilar }) => {
   return (
     <button
-      style={{
-        backgroundColor: 'black',
-        color: 'white',
-        border: 'none',
-        padding: '10px 20px',
-        borderRadius: '8px',
-        cursor: 'pointer',
-        fontSize: '16px'
-      }}
+      onClick={onCompilar}
+      className="bg-black text-white px-4 py-2 rounded-md"
     >
       Compilar
     </button>
   );
-}
+};
 
 export default BotonCompilar;
