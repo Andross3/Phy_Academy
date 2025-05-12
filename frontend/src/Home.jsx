@@ -59,13 +59,7 @@ const StarryBackground = () => {
   return (
     <canvas 
       ref={canvasRef} 
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        zIndex: -1,
-        backgroundColor: 'black'
-      }}
+      className="fixed top-0 left-0 z-[-1] bg-black w-full h-full"
     />
   );
 };
@@ -92,49 +86,32 @@ const Home = () => {
       <StarryBackground />
       <div className="text-center z-10 relative">
         <h1 
-          className="text-5xl text-white" 
-          style={{
-            fontFamily: "'Courier New', Courier, monospace",
-            fontWeight: 'bold'
-          }}
+          className="text-5xl text-white font-['Courier_New'] font-bold"
         >
           {typedText}
           {isTyping && (
             <span 
-              className="inline-block ml-2" 
-              style={{ 
-                animation: 'blink 0.7s infinite',
-                color: 'white'
-              }}
+              className="inline-block ml-2 animate-blink text-white"
             >
               |
             </span>
           )}
         </h1>
         <div 
-          className="text-white mt-2 mb-6" 
-          style={{
-            fontFamily: "'Courier New', Courier, monospace"
-          }}
+          className="text-white mt-2 mb-6 font-['Courier_New']"
         >
           Aprende python desde cero...
         </div>
         <div className="flex justify-center space-x-4">
            <Link to="/login">
               <button 
-                className="px-6 py-2 border-2 border-white bg-white text-black hover:bg-gray-200 transition-colors duration-300"
-                style={{
-                  fontFamily: "'Courier New', Courier, monospace"
-                }}
+                className="px-6 py-2 border-2 border-white bg-white text-black hover:bg-gray-200 transition-colors duration-300 font-['Courier_New']"
               >
                 Iniciar Sesion
               </button>
             </Link>
           <button 
-            className="px-6 py-2 border-2 border-gray-500 bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-300"
-            style={{
-              fontFamily: "'Courier New', Courier, monospace"
-            }}
+            className="px-6 py-2 border-2 border-gray-500 bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-300 font-['Courier_New']"
           >
             Registrarse
           </button>
@@ -146,6 +123,9 @@ const Home = () => {
             0% { opacity: 0; }
             50% { opacity: 1; }
             100% { opacity: 0; }
+          }
+          .animate-blink {
+            animation: blink 0.7s infinite;
           }
         `}
       </style>

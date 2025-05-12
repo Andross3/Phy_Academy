@@ -28,7 +28,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex h-screen bg-[#8e8e93] items-center justify-center p-4">
+    <div className="flex h-screen bg-gray-600 items-center justify-center p-4">
       <div className="fixed left-1/2 transform -translate-x-1/2 flex items-center space-x-12">
         <div className="flex flex-col items-center">
           <div 
