@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "flask": "^0.2.10",
+    "flask-cors": "^0.0.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.1.6"
+  }
+}
