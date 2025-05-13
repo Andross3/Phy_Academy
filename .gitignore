@@ -1,0 +1,16 @@
+# Entornos virtuales de python
+**/venv/
+**/flask/
+# Modulos de node
+**/node_modules/
+**/package-lock.json
+# Ignorar todos los directorios _pycache_
+__pycache__/
+**/*.pyc
+*.pyo
+# Archivos de entorno
+.env
+# Archivos del sistema
+.DS_Store
+# Archivos log
+*.log
