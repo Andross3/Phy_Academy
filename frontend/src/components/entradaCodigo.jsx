@@ -1,12 +1,15 @@
 import React from "react";
 import { useState } from "react";
 
-const EntradaCodigo = () => {
+const EntradaCodigo = ({onChangeCode}) => {
 
     const [code, setCode] = useState("");
 
     const handleChange = (event) => {
-        setCode(event.target.value);
+        // setCode(event.target.value);
+        const nuevoCodigo = event.target.value;
+        setCode(nuevoCodigo);
+        onChangeCode(nuevoCodigo);
     };
 
     return (
