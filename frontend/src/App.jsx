@@ -1,34 +1,35 @@
-import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState } from "react";
+import EstudianteHome from "./pages/EstudianteHome";
+import DocenteHome from "./pages/DocenteHome";
+import LoginForm from "./components/auth/LoginForm.jsx";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [role, setRole] = useState(null);
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1 className='bg-red-500'>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+  const handleLogin = async (email) => {
+    try {
+      const res = await fetch("http://127.0.0.1:5000/api/login", {
+
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setRole(data.role);
+      } else {
+        alert(data.error);
+      }
+    } catch (err) {
+      alert("Error de conexión con el backend.");
+    }
+  };
+
+  if (role === "estudiante") return <EstudianteHome />;
+  if (role === "docente") return <DocenteHome />;
+
+  return <LoginForm onLogin={handleLogin} />;
 }
 
-export default App
