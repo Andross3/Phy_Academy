@@ -15,9 +15,9 @@ const EntradaCodigo = () => {
                 <p>Tarea_1.py</p>
             </div>
             <div className="flex p-4">
-                <div className="text-right pr-2 text-gray-400">
+                <div className="text-right p-1 text-gray-400">
                     {code.split("\n").map((_, index) => (
-                        <div key={index}>{index + 1}</div>
+                        <div className="border-b-3 border-b-stone-100 text-blue-400" key={index}>{index + 1}</div>
                     ))}
                 </div>
                 <textarea
