@@ -1,12 +1,13 @@
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { useState } from "react";
 import EstudianteHome from "./pages/EstudianteHome";
 import DocenteHome from "./pages/DocenteHome";
 import LoginForm from "./components/auth/LoginForm.jsx";
-import Home from "./pages/Home.jsx"; // ✅ Importamos el nuevo componente
+import Home from "./pages/Home.jsx";
+import PaginaCodigo from "./pages/paginaCodigo.jsx";
 
 export default function App() {
   const [role, setRole] = useState(null);
-  const [currentPage, setCurrentPage] = useState("home"); // 👈 Estado para manejar navegación
 
   const handleLogin = async (email) => {
     try {
@@ -15,9 +16,7 @@ export default function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
-
       const data = await res.json();
-
       if (res.ok) {
         setRole(data.role);
       } else {
@@ -28,14 +27,26 @@ export default function App() {
     }
   };
 
-  // 👇 Lógica de redirección por rol
-  if (role === "estudiante") return <EstudianteHome />;
-  if (role === "docente") return <DocenteHome />;
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
 
-  // 👇 Lógica para mostrar la página actual
-  if (currentPage === "home") {
-    return <Home onNavigateToLogin={() => setCurrentPage("login")} />;
-  }
+        <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
 
-  return <LoginForm onLogin={handleLogin} />;
+        {role === "estudiante" && (
+          <Route path="/estudiante" element={<EstudianteHome />} />
+        )}
+        {role === "docente" && (
+          <Route path="/docente" element={<DocenteHome />} />
+        )}
+
+        {role === "estudiante" && <Route path="*" element={<Navigate to="/estudiante" />} />}
+        {role === "docente" && <Route path="*" element={<Navigate to="/docente" />} />}
+
+
+        <Route path="/paginaCodigo" element={<PaginaCodigo/>}></Route>
+      </Routes>
+    </Router>
+  );
 }

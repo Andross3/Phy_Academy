@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function Home({ onNavigateToLogin }) {
+export default function Home() {
   const [typedText, setTypedText] = useState("");
   const [showCursor, setShowCursor] = useState(true);
   const fullText = "Bienvenido a PhyAcademy";
   const typingSpeed = 100; // velocidad de escritura en ms
+  const navigate = useNavigate();//para que el boton pueda llevarte a una pagina
 
   // Efecto para simular escritura letra por letra
   useEffect(() => {
@@ -232,7 +234,7 @@ Características de la plataforma:
       <div className="relative z-10 w-full p-4 flex justify-end">
         <div className="flex gap-4">
           <button 
-            onClick={onNavigateToLogin} 
+            onClick={() => navigate("/login")} 
             className="bg-white text-black px-4 py-2 rounded font-medium hover:bg-gray-200 transition-colors"
           >
             Iniciar sesión
