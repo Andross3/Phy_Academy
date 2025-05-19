@@ -5,6 +5,7 @@ import DocenteHome from "./pages/DocenteHome";
 import LoginForm from "./components/auth/LoginForm.jsx";
 import Home from "./pages/Home.jsx";
 import PaginaCodigo from "./pages/paginaCodigo.jsx";
+import Layout from "./routes/Layout.jsx";
 
 export default function App() {
   const [role, setRole] = useState(null);
@@ -30,22 +31,23 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Layout />}>
+          <Route path="/" element={<Home />} />
 
-        <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
+          <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
 
-        {role === "estudiante" && (
-          <Route path="/estudiante" element={<EstudianteHome />} />
-        )}
-        {role === "docente" && (
-          <Route path="/docente" element={<DocenteHome />} />
-        )}
+          {role === "estudiante" && (
+            <Route path="/estudiante" element={<EstudianteHome />} />
+          )}
+          {role === "docente" && (
+            <Route path="/docente" element={<DocenteHome />} />
+          )}
 
-        {role === "estudiante" && <Route path="*" element={<Navigate to="/estudiante" />} />}
-        {role === "docente" && <Route path="*" element={<Navigate to="/docente" />} />}
+          {role === "estudiante" && <Route path="*" element={<Navigate to="/estudiante" />} />}
+          {role === "docente" && <Route path="*" element={<Navigate to="/docente" />} />}
 
-
-        <Route path="/paginaCodigo" element={<PaginaCodigo/>}></Route>
+          <Route path="paginaCodigo" element={<PaginaCodigo />}></Route>
+        </Route>
       </Routes>
     </Router>
   );

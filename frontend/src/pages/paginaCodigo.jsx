@@ -24,21 +24,22 @@ const PaginaCodigo = () => {
     setResultado(errores);
   };
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Tarea 1</h1>
-      <p className="mb-6">Hcer un programa que te devuelva ¡Hola Mundo!</p>
-      <BotonCompilar onCompilar={manejarCompilacion} />
-      <div className="grid grid-cols-2 gap-4">
-        <div>
+    <div className="p-6 text-white">
+      <div className="flex flex-col items-center w-full">
+        <h1 className="text-3xl font-bold mb-2 underline text-center">Tarea 1</h1>
+        <p className="mb-2 pl-10 text-white text-xl text-left italic w-full">Hacer un programa que te devuelva ¡Hola Mundo!</p>
+      </div>
+      <div className="flex justify-end">
+        <BotonCompilar onCompilar={manejarCompilacion} /></div>
+      <div className="grid grid-cols-[1fr_2fr] gap-4">
+        <div className="w-full">
           <ArchivoCompilador></ArchivoCompilador>
         </div>
-        <div>
+        <div className="w-full">
           <EntradaCodigo onChangeCode={setCodigo}></EntradaCodigo>
           <div className="flex justify-end">
           </div>
-          {/* Aquí se muestra el resultado de la compilación */}
           <ResultadoCompilacion resultado={resultado} />
-
         </div>
       </div>
     </div>

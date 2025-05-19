@@ -48,31 +48,6 @@ Características de la plataforma:
 ¡Únete a nuestra comunidad y comienza tu viaje en el mundo de la programación!
 `;
 
-  // Componente para crear las estrellas (puntos blancos)
-  const Stars = () => {
-    const starCount = 200;
-    const stars = [];
-    
-    for (let i = 0; i < starCount; i++) {
-      const size = Math.random() * 2;
-      stars.push(
-        <div
-          key={i}
-          className="absolute rounded-full bg-white"
-          style={{
-            width: `${size}px`,
-            height: `${size}px`,
-            top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`,
-            opacity: Math.random() * 0.8 + 0.2
-          }}
-        />
-      );
-    }
-    
-    return <>{stars}</>;
-  };
-
   // Datos de los cursos
   const topCursos = [
     {
@@ -225,10 +200,6 @@ Características de la plataforma:
 
   return (
     <div className="relative h-screen w-full overflow-y-auto overflow-x-hidden bg-black">
-      {/* Fondo de universo */}
-      <div className="fixed top-0 left-0 w-full h-full overflow-hidden z-0">
-        <Stars />
-      </div>
 
       {/* Barra superior con botones de navegación */}
       <div className="relative z-10 w-full p-4 flex justify-end">
