@@ -7,10 +7,7 @@ export default function ResultadoCompilacion({ resultado }) {
         </div>
         <div className="p-4 text-gray-800 whitespace-pre-wrap">
           {resultado ? resultado : 'Respuesta del programa'}
-           <hr className=" border-t border-dashed border-gray-500 my-2" />
-          <hr className=" mt-5 border-t border-dashed border-gray-500 my-2" />
-           <hr className=" mt-5 border-t border-dashed border-gray-500 my-2" />
-        </div>
+         </div>
       </div>
     );
   }
