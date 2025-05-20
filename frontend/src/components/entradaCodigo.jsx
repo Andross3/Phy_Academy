@@ -15,6 +15,14 @@ const EntradaCodigo = ({ onChangeCode }) => {
         onChangeCode(nuevoCodigo);
     };
 
+    const resaltarCodigo = (codigo) => {
+        return codigo.split(/\s+/).map((palabra, index) => (
+            palabrasResaltadas.includes(palabra) ?
+                <span key={index} style={{ color: "cyan" }}>{palabra} </span>
+                : <span key={index}>{palabra} </span>
+        ));
+    };
+
     return (
         <>
             <div className="flex items-center bg-black border border-white border-b-0 p-2 w-fit -mt-2 ml-12 text-white font-semibold space-x-2">
