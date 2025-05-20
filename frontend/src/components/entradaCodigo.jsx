@@ -1,8 +1,6 @@
 import React from "react";
 import { useState } from "react";
 import { FaPython } from "react-icons/fa";
-import CodeMirror from "@codemirror/lang-python";
-import { python } from "@codemirror/lang-python";
 
 const EntradaCodigo = ({ onChangeCode }) => {
 
@@ -15,6 +13,14 @@ const EntradaCodigo = ({ onChangeCode }) => {
         const nuevoCodigo = event.target.value;
         setCode(nuevoCodigo);
         onChangeCode(nuevoCodigo);
+    };
+
+    const resaltarCodigo = (codigo) => {
+        return codigo.split(/\s+/).map((palabra, index) => (
+            palabrasResaltadas.includes(palabra) ?
+                <span key={index} style={{ color: "cyan" }}>{palabra} </span>
+                : <span key={index}>{palabra} </span>
+        ));
     };
 
     return (

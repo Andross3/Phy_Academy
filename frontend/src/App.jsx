@@ -6,6 +6,7 @@ import LoginForm from "./components/auth/LoginForm.jsx";
 import Home from "./pages/Home.jsx";
 import PaginaCodigo from "./pages/paginaCodigo.jsx";
 import Layout from "./routes/Layout.jsx";
+import EstudiantePage from "./pages/EstudiantePage.jsx";
 
 export default function App() {
   const [role, setRole] = useState(null);
@@ -47,6 +48,7 @@ export default function App() {
           {role === "docente" && <Route path="*" element={<Navigate to="/docente" />} />}
 
           <Route path="paginaCodigo" element={<PaginaCodigo />}></Route>
+          <Route path="page/estudiante" element={<EstudiantePage />}></Route>
         </Route>
       </Routes>
     </Router>
