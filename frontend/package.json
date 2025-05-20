@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@codemirror/lang-python": "^6.2.1",
     "@tailwindcss/vite": "^4.1.5",
     "codemirror": "^6.0.1",
     "react": "^19.0.0",

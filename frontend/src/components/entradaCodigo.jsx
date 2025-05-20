@@ -1,8 +1,6 @@
 import React from "react";
 import { useState } from "react";
 import { FaPython } from "react-icons/fa";
-import CodeMirror from "@codemirror/lang-python";
-import { python } from "@codemirror/lang-python";
 
 const EntradaCodigo = ({ onChangeCode }) => {
 
