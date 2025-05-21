@@ -128,22 +128,40 @@ export default function RegistroProfesor({ onBackToHome }) {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
-    if (e && e.preventDefault) {
-      e.preventDefault();
+  const handleSubmit = async (e) => {
+  if (e && e.preventDefault) {
+    e.preventDefault();
+  }
+
+  const newErrors = validateForm();
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
+    return;
+  }
+
+  try {
+    const response = await fetch("http://localhost:5000/registrar-docente", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert(data.message || "Registro exitoso. ¡Bienvenido a PhyAcademy!");
+      onBackToHome();
+    } else {
+      alert(data.error || "Hubo un error al registrar al docente.");
     }
-    
-    const newErrors = validateForm();
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-    
-    // Aquí iría la lógica para enviar los datos al backend
-    console.log("Datos de registro del profesor:", formData);
-    alert("Registro exitoso. ¡Bienvenido a PhyAcademy!");
-    onBackToHome();
-  };
+
+  } catch (error) {
+    console.error("Error en la solicitud:", error);
+    alert("Error al conectar con el servidor.");
+  }
+};
 
   return (
     <div className="min-h-screen flex flex-col relative">

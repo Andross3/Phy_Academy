@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {
+
   const [typedText, setTypedText] = useState("");
   const [showCursor, setShowCursor] = useState(true);
   const fullText = "Bienvenido a PhyAcademy";
@@ -199,7 +200,7 @@ Características de la plataforma:
   };
 
   return (
-    <div className="relative h-screen w-full overflow-y-auto overflow-x-hidden bg-black">
+    <div className="relative h-screen w-full overflow-y-auto overflow-x-hidden">
 
       {/* Barra superior con botones de navegación */}
       <div className="relative z-10 w-full p-4 flex justify-end">
