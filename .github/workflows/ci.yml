@@ -1,0 +1,46 @@
+name: Integración Continua
+
+on:
+  push:
+    branches: [ "main" ] # cuando se haga push a la rama main
+  pull_request:
+    branches: [ "main" ] # cuando se haga un pull request hacia main
+
+jobs:
+  construir-y-probar:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: phy_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Obtener código
+        uses: actions/checkout@v3
+
+      - name: Configurar Docker Compose
+        run: docker-compose up -d --build
+
+      - name: Esperar a que los servicios estén listos
+        run: sleep 15
+
+      - name: Ejecutar pruebas del backend (Flask)
+        run: docker-compose exec -T backend pytest
+
+      - name: Ejecutar pruebas del frontend (React)
+        run: docker-compose exec -T frontend npm test -- --watchAll=false
+
+      - name: Desmontar servicios
+        if: always()
+        run: docker-compose down
