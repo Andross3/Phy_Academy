@@ -5,7 +5,7 @@ from backend.app.core.extensions import db
 from backend.app.routes.auth_routes import auth_bp
 from sqlalchemy import text
 from backend.app.routes.ejecutador_routes import ejecutador_bp
-from backend.app.routes.tarea_routes import tarea_bp  # Importa tarea_bp
+from backend.app.routes.tareas_routes import tarea_bp  # Importa tarea_bp
 from flask_migrate import Migrate
 
 app = Flask(__name__)
