@@ -13,5 +13,6 @@ class Docente(db.Model):
     provincia = db.Column(db.String(50))
     grado_academico = db.Column(db.String(50))
     institucion_educativa = db.Column(db.String(100))
+    contraseña = db.Column(db.String(255), nullable=False) 
 
     cursos = db.relationship("Curso", back_populates="docente")

@@ -1,60 +1,44 @@
 import React, { useState, useRef, useEffect } from "react";
 
-// Componente para el fondo de estrellas
 const StarryBackground = () => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-
+    const ctx = canvas.getContext("2d");
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const stars = [];
-    const starCount = 200;
-
-    for (let i = 0; i < starCount; i++) {
-      stars.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        radius: Math.random() * 1.5,
-        opacity: Math.random()
-      });
-    }
+    const stars = Array.from({ length: 200 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      radius: Math.random() * 1.5,
+      opacity: Math.random(),
+    }));
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // Draw stars
-      stars.forEach(star => {
+      stars.forEach((star) => {
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
         ctx.fill();
       });
-
       requestAnimationFrame(animate);
     };
 
     animate();
-
-    // Resize handler
     const handleResize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     };
-
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
-    <canvas 
-      ref={canvasRef} 
+    <canvas
+      ref={canvasRef}
       className="fixed top-0 left-0 z-0 bg-black w-full h-full"
     />
   );
@@ -72,105 +56,80 @@ export default function RegistroProfesor({ onBackToHome }) {
     departamento: "",
     provincia: "",
     grado_academico: "",
-    institucion_educativa: ""
+    institucion_educativa: "",
   });
-  
+
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-    
-    // Limpiar error cuando se modifica un campo
-    if (errors[name]) {
-      setErrors({
-        ...errors,
-        [name]: null,
-      });
-    }
+    setFormData({ ...formData, [name]: value });
+    if (errors[name]) setErrors({ ...errors, [name]: null });
   };
 
   const validateForm = () => {
     const newErrors = {};
-    
-    // Validaciones básicas
     if (!formData.nombre.trim()) newErrors.nombre = "El nombre es obligatorio";
     if (!formData.apellido.trim()) newErrors.apellido = "El apellido es obligatorio";
-    
-    // Validación de email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.correo.trim()) {
       newErrors.correo = "El correo es obligatorio";
     } else if (!emailRegex.test(formData.correo)) {
       newErrors.correo = "Ingrese un correo válido";
     }
-    
-    // Validación de contraseña
-    if (!formData.password) {
-      newErrors.password = "La contraseña es obligatoria";
-    } else if (formData.password.length < 8) {
+    if (!formData.password || formData.password.length < 8) {
       newErrors.password = "La contraseña debe tener al menos 8 caracteres";
     }
-    
-    // Confirmación de contraseña
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Las contraseñas no coinciden";
     }
-    
-    // Grado académico
     if (!formData.grado_academico.trim()) {
       newErrors.grado_academico = "El grado académico es obligatorio";
     }
-    
     return newErrors;
   };
 
   const handleSubmit = async (e) => {
-  if (e && e.preventDefault) {
     e.preventDefault();
-  }
-
-  const newErrors = validateForm();
-  if (Object.keys(newErrors).length > 0) {
-    setErrors(newErrors);
-    return;
-  }
-
-  try {
-    const response = await fetch("http://localhost:5000/registrar-docente", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      alert(data.message || "Registro exitoso. ¡Bienvenido a PhyAcademy!");
-      onBackToHome();
-    } else {
-      alert(data.error || "Hubo un error al registrar al docente.");
+    const newErrors = validateForm();
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
     }
 
-  } catch (error) {
-    console.error("Error en la solicitud:", error);
-    alert("Error al conectar con el servidor.");
-  }
-};
+    try {
+      const { password, confirmPassword, ...rest } = formData;
+      const docenteData = {
+        ...rest,
+        contrasena: password, // Este campo debe coincidir con el nombre esperado en el backend
+      };
+
+      const response = await fetch("http://127.0.0.1:5000/docentes/registrar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(docenteData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert(data.mensaje || "Registro exitoso. ¡Bienvenido a PhyAcademy!");
+        onBackToHome();
+      } else {
+        alert(data.error || "Hubo un error al registrar al docente.");
+      }
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+      alert("Error al conectar con el servidor.");
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col relative">
-      {/* Fondo estrellado */}
       <StarryBackground />
-      
-      {/* Barra superior */}
+
       <div className="bg-gray-800 bg-opacity-80 p-4 flex items-center justify-between relative z-10">
-        <button 
+        <button
           onClick={onBackToHome}
           className="text-white flex items-center hover:text-blue-300 transition-colors"
         >
@@ -180,14 +139,13 @@ export default function RegistroProfesor({ onBackToHome }) {
           Volver a inicio
         </button>
         <div className="text-white text-xl font-bold">PhyAcademy</div>
-        <div className="w-24"></div> {/* Espaciador para mantener el título centrado */}
+        <div className="w-24"></div>
       </div>
-      
-      {/* Contenido de la página de registro */}
-      <div className="flex-grow flex items-center justify-center relative z-10 p-4">        
-        <div className="w-full max-w-md bg-gray-800 bg-opacity-80 rounded-lg shadow-lg overflow-hidden p-8 border border-blue-500">
+
+      <div className="flex-grow flex items-center justify-center relative z-10 p-4">
+        <form onSubmit={handleSubmit} className="w-full max-w-md bg-gray-800 bg-opacity-80 rounded-lg shadow-lg overflow-hidden p-8 border border-blue-500">
           <h2 className="text-white text-2xl font-bold mb-6 text-center">Registro de Profesor</h2>
-          
+
           <div className="flex flex-col items-center">
             <div className="w-full space-y-4 overflow-y-auto max-h-96 pr-2">
               {/* Información Personal */}
@@ -343,7 +301,7 @@ export default function RegistroProfesor({ onBackToHome }) {
               Registrarse
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );

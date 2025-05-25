@@ -1,58 +1,45 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+// App.jsx
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
+import SeleccionRolModal from "./components/SeleccionRolModal";
+import RegistroEstudiante from "./pages/registro/RegistroEstudiante";
+import RegistroProfesor from "./pages/registro/RegistroProfesor";
 import EstudianteHome from "./pages/EstudianteHome";
 import DocenteHome from "./pages/DocenteHome";
-import LoginForm from "./components/auth/LoginForm.jsx";
-import Home from "./pages/Home.jsx";
-import PaginaCodigo from "./pages/paginaCodigo.jsx";
-import RegistroProfesor from "./pages/RegistroProfesor.jsx";
-import Layout from "./routes/Layout.jsx";
-import EstudiantePage from "./pages/EstudiantePage.jsx";
+import LoginForm from "./components/auth/LoginForm";
+import Home from "./pages/Home";
+import PaginaCodigo from "./pages/paginaCodigo";
+import EstudiantePage from "./pages/EstudiantePage";
+import Layout from "./routes/Layout";
 
 export default function App() {
-  const [role, setRole] = useState(null);
-
-  const handleLogin = async (email) => {
-    try {
-      const res = await fetch("http://127.0.0.1:5000/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setRole(data.role);
-      } else {
-        alert(data.error);
-      }
-    } catch (err) {
-      alert("Error de conexión con el backend.");
-    }
-  };
+  const [mostrarModalRol, setMostrarModalRol] = useState(false);
 
   return (
     <Router>
+      {mostrarModalRol && (
+        <SeleccionRolModal onSeleccion={() => setMostrarModalRol(false)} />
+      )}
+
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route path="/" element={<Home />} />
-
-          <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
-
-          {role === "estudiante" && (
-            <Route path="/estudiante" element={<EstudianteHome />} />
-          )}
-          {role === "docente" && (
-            <Route path="/docente" element={<DocenteHome />} />
-          )}
-
-          {role === "estudiante" && <Route path="*" element={<Navigate to="/estudiante" />} />}
-          {role === "docente" && <Route path="*" element={<Navigate to="/docente" />} />}
-
-          <Route path="paginaCodigo" element={<PaginaCodigo />}></Route>
-          <Route path="page/estudiante" element={<EstudiantePage />}></Route>
-          <Route path="registroProfesor" element={<RegistroProfesor />}></Route>
+          <Route index element={<Home onRegisterClick={() => setMostrarModalRol(true)} />} />
+          <Route path="login" element={<LoginForm />} />
+          <Route path="docente" element={<DocenteHome />} />
+          <Route path="estudiante" element={<EstudianteHome />} />
+          <Route path="paginaCodigo" element={<PaginaCodigo />} />
+          <Route path="page/estudiante" element={<EstudiantePage />} />
+          <Route
+            path="registroProfesor"
+            element={<RegistroProfesor onBackToHome={() => window.location.href = "/"} />}
+          />
+          <Route
+            path="registroEstudiante"
+            element={<RegistroEstudiante onBackToHome={() => window.location.href = "/"} />}
+          />
         </Route>
       </Routes>
     </Router>
   );
 }
+

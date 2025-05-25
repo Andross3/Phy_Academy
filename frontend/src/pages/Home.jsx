@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import SeleccionRolModal from "../components/SeleccionRolModal"; // ajusta el path si es necesario
 
 export default function Home() {
 
+  const [mostrarModalRol, setMostrarModalRol] = useState(false);
   const [typedText, setTypedText] = useState("");
   const [showCursor, setShowCursor] = useState(true);
   const fullText = "Bienvenido a PhyAcademy";
@@ -212,7 +214,7 @@ Características de la plataforma:
             Iniciar sesión
           </button>
           <button
-            onClick={() => navigate("/RegistroProfesor")}
+            onClick={() => setMostrarModalRol(true)}
             className="bg-gray-500 text-white px-4 py-2 rounded font-medium hover:bg-gray-600 transition-colors"
           >
             Registrarse
@@ -290,6 +292,10 @@ Características de la plataforma:
 
       {/* Pie de página */}
       <Footer />
+      {mostrarModalRol && (
+        <SeleccionRolModal onSeleccion={() => setMostrarModalRol(false)} />
+      )}
+
     </div>
   );
 }
