@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import SeleccionRolModal from "../components/SeleccionRolModal"; // ajusta el path si es necesario
 
-export default function Home({ onNavigateToLogin }) {
+export default function Home() {
+
+  const [mostrarModalRol, setMostrarModalRol] = useState(false);
   const [typedText, setTypedText] = useState("");
   const [showCursor, setShowCursor] = useState(true);
   const fullText = "Bienvenido a PhyAcademy";
   const typingSpeed = 100; // velocidad de escritura en ms
+  const navigate = useNavigate();//para que el boton pueda llevarte a una pagina
 
   // Efecto para simular escritura letra por letra
   useEffect(() => {
@@ -46,31 +51,6 @@ Características de la plataforma:
 ¡Únete a nuestra comunidad y comienza tu viaje en el mundo de la programación!
 `;
 
-  // Componente para crear las estrellas (puntos blancos)
-  const Stars = () => {
-    const starCount = 200;
-    const stars = [];
-    
-    for (let i = 0; i < starCount; i++) {
-      const size = Math.random() * 2;
-      stars.push(
-        <div
-          key={i}
-          className="absolute rounded-full bg-white"
-          style={{
-            width: `${size}px`,
-            height: `${size}px`,
-            top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`,
-            opacity: Math.random() * 0.8 + 0.2
-          }}
-        />
-      );
-    }
-    
-    return <>{stars}</>;
-  };
-
   // Datos de los cursos
   const topCursos = [
     {
@@ -95,7 +75,7 @@ Características de la plataforma:
       titulo: "Hacking Ético con Python (Fundamentos)",
       descripcion: "Domina técnicas básicas de ciberseguridad con scripts Python.",
       estudiantes: "1,800+",
-      estrellas: 4 
+      estrellas: 4
     }
   ];
 
@@ -104,10 +84,10 @@ Características de la plataforma:
     return (
       <div className="flex">
         {[...Array(5)].map((_, i) => (
-          <svg 
-            key={i} 
-            className={`w-5 h-5 ${i < rating ? "text-yellow-400" : "text-gray-500"}`} 
-            fill="currentColor" 
+          <svg
+            key={i}
+            className={`w-5 h-5 ${i < rating ? "text-yellow-400" : "text-gray-500"}`}
+            fill="currentColor"
             viewBox="0 0 20 20"
           >
             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -135,10 +115,10 @@ Características de la plataforma:
     return (
       <div className="absolute top-40 right-16 opacity-20">
         <svg className="w-32 h-32" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path 
+          <path
             d="M63.391 1.988c-4.222.02-8.252.379-11.8 1.007-10.45 1.846-12.346 5.71-12.346 12.837v9.411h24.693v3.137h-33.961c-7.176 0-13.46 4.313-15.426 12.521-2.268 9.405-2.368 15.275 0 25.096 1.755 7.311 5.947 12.519 13.124 12.519h8.491v-11.282c0-8.151 7.051-15.34 15.426-15.34h24.665c6.866 0 12.346-5.654 12.346-12.548v-23.513c0-6.693-5.646-11.72-12.346-12.837-4.244-.706-8.645-1.027-12.866-1.008zm-13.354 7.569c2.55 0 4.634 2.117 4.634 4.721 0 2.593-2.083 4.69-4.634 4.69-2.56 0-4.633-2.097-4.633-4.69-.001-2.604 2.073-4.721 4.633-4.721z"
             fill="#347AB4" />
-          <path 
+          <path
             d="M91.682 28.38v10.966c0 8.5-7.208 15.655-15.426 15.655h-24.665c-6.756 0-12.346 5.783-12.346 12.549v23.515c0 6.691 5.818 10.628 12.346 12.547 7.816 2.297 15.312 2.713 24.665 0 6.216-1.801 12.346-5.423 12.346-12.547v-9.412h-24.664v-3.138h37.012c7.176 0 9.852-5.005 12.348-12.519 2.578-7.735 2.467-15.174 0-25.096-1.774-7.145-5.161-12.521-12.348-12.521h-9.268zm-13.873 59.569c2.561 0 4.634 2.097 4.634 4.692 0 2.602-2.074 4.719-4.634 4.719-2.55 0-4.633-2.117-4.633-4.719 0-2.595 2.083-4.692 4.633-4.692z"
             fill="#FFCA1D" />
         </svg>
@@ -151,17 +131,17 @@ Características de la plataforma:
     return (
       <div className="absolute bottom-40 left-16 opacity-20">
         <svg className="w-32 h-32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path 
+          <path
             d="M8.293 6.293a1 1 0 0 1 1.414 0 1 1 0 0 1 0 1.414L5.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414l-5-5a1 1 0 0 1 0-1.414l5-5z"
             fill="#4C566A" />
-          <path 
+          <path
             d="M15.707 6.293a1 1 0 0 0-1.414 0 1 1 0 0 0 0 1.414L18.586 12l-4.293 4.293a1 1 0 0 0 1.414 1.414l5-5a1 1 0 0 0 0-1.414l-5-5z"
             fill="#4C566A" />
         </svg>
       </div>
     );
   };
-  
+
   // Componente para el pie de página
   const Footer = () => {
     return (
@@ -170,9 +150,9 @@ Características de la plataforma:
           {/* Íconos sociales */}
           <div className="flex space-x-8 mb-3">
             {/* Facebook */}
-            <a 
-              href="https://www.facebook.com/share/19XJZF6dST/" 
-              target="_blank" 
+            <a
+              href="https://www.facebook.com/share/19XJZF6dST/"
+              target="_blank"
               rel="noopener noreferrer"
               className="transition-transform hover:scale-110"
             >
@@ -182,11 +162,11 @@ Características de la plataforma:
                 </svg>
               </div>
             </a>
-            
+
             {/* Instagram */}
-            <a 
-              href="https://www.instagram.com/lauraa._.fernandez?igsh=MWUxZXE2dHhjcHZuMw==" 
-              target="_blank" 
+            <a
+              href="https://www.instagram.com/lauraa._.fernandez?igsh=MWUxZXE2dHhjcHZuMw=="
+              target="_blank"
               rel="noopener noreferrer"
               className="transition-transform hover:scale-110"
             >
@@ -196,11 +176,11 @@ Características de la plataforma:
                 </svg>
               </div>
             </a>
-            
+
             {/* X (Twitter) */}
-            <a 
-              href="https://x.com/Maria_LauraFer?t=b9-kuFR5RhdSbILt5eEkvA&s=09" 
-              target="_blank" 
+            <a
+              href="https://x.com/Maria_LauraFer?t=b9-kuFR5RhdSbILt5eEkvA&s=09"
+              target="_blank"
               rel="noopener noreferrer"
               className="transition-transform hover:scale-110"
             >
@@ -211,7 +191,7 @@ Características de la plataforma:
               </div>
             </a>
           </div>
-          
+
           {/* Copyright */}
           <div className="text-gray-400 text-sm">
             ©2025 PhyAcademy. Todos los derechos reservados
@@ -222,29 +202,26 @@ Características de la plataforma:
   };
 
   return (
-    <div className="relative h-screen w-full overflow-y-auto overflow-x-hidden bg-black">
-      {/* Fondo de universo */}
-      <div className="fixed top-0 left-0 w-full h-full overflow-hidden z-0">
-        <Stars />
-      </div>
+    <div className="relative h-screen w-full overflow-y-auto overflow-x-hidden">
 
       {/* Barra superior con botones de navegación */}
       <div className="relative z-10 w-full p-4 flex justify-end">
         <div className="flex gap-4">
-          <button 
-            onClick={onNavigateToLogin} 
+          <button
+            onClick={() => navigate("/login")}
             className="bg-white text-black px-4 py-2 rounded font-medium hover:bg-gray-200 transition-colors"
           >
             Iniciar sesión
           </button>
-          <button 
+          <button
+            onClick={() => setMostrarModalRol(true)}
             className="bg-gray-500 text-white px-4 py-2 rounded font-medium hover:bg-gray-600 transition-colors"
           >
             Registrarse
           </button>
         </div>
       </div>
-      
+
       {/* Título con efecto de tipeo */}
       <div className="relative z-10 w-full flex justify-center pt-20">
         <div className="text-white text-5xl font-bold">
@@ -266,7 +243,7 @@ Características de la plataforma:
             </div>
             <div className="mx-auto text-sm font-medium">Acerca de PhyAcademy</div>
           </div>
-          
+
           {/* Área de información */}
           <div className="p-4 overflow-auto h-64 font-mono text-sm">
             <pre className="text-green-400 whitespace-pre-wrap">
@@ -280,8 +257,8 @@ Características de la plataforma:
 
         {/* Sección Top Cursos */}
         <div className="w-full px-8 py-4 mb-8">
-        <h2 className="text-white text-4xl font-mono mb-6 text-center">TOP CURSOS</h2>
-          
+          <h2 className="text-white text-4xl font-mono mb-6 text-center">TOP CURSOS</h2>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {topCursos.map((curso, index) => (
               <div key={index} className="bg-gray-900 bg-opacity-80 rounded-lg p-4 shadow-lg border border-gray-800">
@@ -292,14 +269,14 @@ Características de la plataforma:
                 </div>
                 <h3 className="text-white text-lg font-bold mb-2">{curso.titulo}</h3>
                 <p className="text-gray-400 text-sm mb-4">{curso.descripcion}</p>
-                
+
                 <div className="flex items-center mb-2">
                   <svg className="w-4 h-4 text-gray-400 mr-1" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
                   </svg>
                   <span className="text-gray-400 text-sm">{curso.estudiantes}</span>
                 </div>
-                
+
                 <RatingStars rating={curso.estrellas} />
               </div>
             ))}
@@ -312,9 +289,13 @@ Características de la plataforma:
           <h2 className="text-white text-2xl font-mono">Inscríbete con nosotros</h2>
         </div>
       </div>
-      
+
       {/* Pie de página */}
       <Footer />
+      {mostrarModalRol && (
+        <SeleccionRolModal onSeleccion={() => setMostrarModalRol(false)} />
+      )}
+
     </div>
   );
 }
