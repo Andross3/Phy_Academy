@@ -19,11 +19,7 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-<<<<<<< HEAD
           POSTGRES_DB: testdb
-=======
-          POSTGRES_DB: phy_db
->>>>>>> b0c8de7 (Create ci.yml)
         ports:
           - 5432:5432
         options: >-
@@ -32,7 +28,6 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
-<<<<<<< HEAD
     env:
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/testdb
 
@@ -73,24 +68,3 @@ jobs:
       - name: Ejecutar pruebas del backend
         working-directory: backend
         run: pytest
-=======
-    steps:
-      - name: Obtener código
-        uses: actions/checkout@v3
-
-      - name: Configurar Docker Compose
-        run: docker-compose up -d --build
-
-      - name: Esperar a que los servicios estén listos
-        run: sleep 15
-
-      - name: Ejecutar pruebas del backend (Flask)
-        run: docker-compose exec -T backend pytest
-
-      - name: Ejecutar pruebas del frontend (React)
-        run: docker-compose exec -T frontend npm test -- --watchAll=false
-
-      - name: Desmontar servicios
-        if: always()
-        run: docker-compose down
->>>>>>> b0c8de7 (Create ci.yml)
