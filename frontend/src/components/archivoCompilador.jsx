@@ -16,7 +16,7 @@ const ArchivoCompilador = () => {
     ];
 
     return (
-        <div className='ml-1 flex flex-col  p-4 rounded shadow-md w-full h-[650px] border border-white overflow-auto'>
+        <div className='ml-1 flex flex-col p-4 rounded shadow-md h-[550px] w-50px border border-white overflow-auto'>
             <div className="flex items-center  bg-black p-2 border-b boder-grey-100 w-fit -mt-2 ml-12 text-white font-semibold space-x-2">
                 <i class="bi bi-person-workspace"></i>
             <h2 className='text-xl font-bold text-gray-50'>Archivos en los que trabajo</h2>
