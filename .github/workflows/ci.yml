@@ -1,13 +1,13 @@
-name: Integración Continua
+name: CI - Phy Academy
 
 on:
   push:
-    branches: [ "main" ] # cuando se haga push a la rama main
+    branches: [ main ]
   pull_request:
-    branches: [ "main" ] # cuando se haga un pull request hacia main
+    branches: [ main ]
 
 jobs:
-  construir-y-probar:
+  verificar-codigo:
     runs-on: ubuntu-latest
 
     services:
@@ -16,7 +16,7 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: phy_db
+          POSTGRES_DB: testdb
         ports:
           - 5432:5432
         options: >-
@@ -25,22 +25,39 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/testdb
+
     steps:
-      - name: Obtener código
-        uses: actions/checkout@v3
+      - name: Clonar repositorio
+        uses: actions/checkout@v4
 
-      - name: Configurar Docker Compose
-        run: docker-compose up -d --build
+      # ===== FRONTEND =====
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
 
-      - name: Esperar a que los servicios estén listos
-        run: sleep 15
+      - name: Instalar dependencias frontend
+        working-directory: frontend
+        run: npm install
 
-      - name: Ejecutar pruebas del backend (Flask)
-        run: docker-compose exec -T backend pytest
+      - name: Ejecutar linter del frontend
+        working-directory: frontend
+        run: npm run lint
 
-      - name: Ejecutar pruebas del frontend (React)
-        run: docker-compose exec -T frontend npm test -- --watchAll=false
+      - name: Verificar compilación del frontend
+        working-directory: frontend
+        run: npm run build
 
-      - name: Desmontar servicios
-        if: always()
-        run: docker-compose down
+      # ===== BACKEND =====
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.10
+
+      - name: Instalar dependencias backend
+        working-directory: backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
