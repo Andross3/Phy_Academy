@@ -65,6 +65,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           
-      #- name: Ejecutar pruebas del backend
-      #  working-directory: backend
-      #  run: pytest
+      - name: Ejecutar pruebas del backend
+        working-directory: backend
+        run: pytest
