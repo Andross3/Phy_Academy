@@ -3,12 +3,10 @@ name: CI - Phy Academy
 on:
   push:
     branches: 
-      - main
-      - develop
+      - registro
   pull_request:
     branches:
-      - main
-      - develop
+      - registro
   workflow_dispatch:
 
 jobs:
