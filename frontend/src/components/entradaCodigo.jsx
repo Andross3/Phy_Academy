@@ -6,45 +6,27 @@ import { FaPython } from "react-icons/fa";
 import "prismjs/components/prism-python";
 import 'prismjs/themes/prism-okaidia.css'; 
 
-const EntradaCodigo = ({ onChangeCode }) => {
-  const [code, setCode] = useState("");
-
-  const handleChange = (nuevoCodigo) => {
-    setCode(nuevoCodigo);
-    onChangeCode(nuevoCodigo);
+const EntradaCodigo = ({ onChangeCode, value, restricciones }) => {
+  const highlightKeywords = (text) => {
+    if (!restricciones || restricciones.length === 0) return text;
+    
+    const regex = new RegExp(`\\b(${restricciones.join('|')})\\b`, 'gi');
+    return text.replace(regex, '<span class="text-red-500 font-bold">$1</span>');
   };
 
   return (
-    <div className="flex flex-col h-300px w-full">
-      <div className="flex items-center bg-black border border-white border-b-0 w-fit p-1 -mt-2 ml-12 text-white font-semibold space-x-2">
-        <FaPython size={20} className="text-blue-400" />
-        <p className="text-white">Tarea_1.py</p>
-      </div>
-      <div className="border border-white bg-black w-full h-[300px] overflow-auto">
-        <div className="flex p-2">
-          {/* Numeración de líneas */}
-          <div className="text-right pr-4 pt-2 text-gray-400 w-10 flex flex-col items-end select-none ">
-            {code.split("\n").map((_, index) => (
-              <div className="text-blue-400" key={index}>{index + 1}</div>
-            ))}
-          </div>
-
-          {/* Editor con resaltado */}
-            <Editor
-              className="flex-1 bg-black text-white border border-gray-600 p-4 pt-8 resize-none h-full overflow-auto"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "#555 #222"
-              }}
-              value={code}
-              onValueChange={handleChange}
-              highlight={code =>
-                Prism.highlight(code, Prism.languages.python, "python")
-              }
-              padding={10}
-            />
+    <div className="relative">
+      <textarea
+        className="w-full h-64 bg-gray-800 text-white p-4 font-mono rounded-lg"
+        onChange={(e) => onChangeCode(e.target.value)}
+        value={value}
+        spellCheck="false"
+      />
+      {restricciones && restricciones.length > 0 && (
+        <div className="absolute bottom-2 left-2 text-xs text-gray-400">
+          Palabras prohibidas: {restricciones.join(', ')}
         </div>
-      </div>
+      )}
     </div>
   );
 };
