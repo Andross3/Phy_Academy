@@ -8,14 +8,14 @@ class Compilar_Codigo:
         self.archivo_py = 'pepe.py'
 
     def convertir(self):
-        carpeta_destino = "sandbox/archivos_compilacion"
+        carpeta_destino = "backend/sandbox/archivos_compilacion"
         # os.makedirs(carpeta_destino, exist_ok=True)
         ruta_archivo = os.path.join(carpeta_destino, self.archivo_py)
         with open(ruta_archivo, "w", encoding="utf-8") as archivo:
             archivo.write(self.codigo)
 
     def compilar(self):
-        resultado = subprocess.run(["docker", "run", "--rm", "-v", f"{os.getcwd()}/sandbox/archivos_compilacion:/app", "sandbox", "python", f'{self.archivo_py}'], 
+        resultado = subprocess.run(["docker", "run", "--rm", "-v", f"{os.getcwd()}/backend/sandbox/archivos_compilacion:/app", "sandbox", "python", f'{self.archivo_py}'], 
                         capture_output=True, text=True)
         if resultado.stderr:
             self.formatoErrores(resultado.stderr)
