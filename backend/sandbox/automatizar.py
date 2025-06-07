@@ -19,9 +19,8 @@ class Compilar_Codigo:
                         capture_output=True, text=True)
         if resultado.stderr:
             self.formatoErrores(resultado.stderr)
-            # print('error')
         else:
-            print('todo bien')
+            print(resultado.stdout.strip())
         
     def formatoErrores(self, texto_error_capturado):
         lineas_error = re.findall(r'File ".*", line (\d+)', texto_error_capturado)
@@ -31,3 +30,9 @@ class Compilar_Codigo:
         print(f'Linea: {lineas_error[-1]}')
         print(f'Tipo: {tipo_error.group(1)}')
         print(f'Descripcion del error: {descripcion_error}')
+
+codigo = """
+x=x/0"""
+prueba = Compilar_Codigo(codigo)
+prueba.convertir()
+prueba.compilar()
