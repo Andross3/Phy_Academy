@@ -41,11 +41,6 @@ const PaginaCodigo = () => {
           <ResultadoCompilacion resultado={resultado} />
         </div>
         <div className="row-span-3 flex flex-col gap-2">
-          <input
-            type="text"
-            placeholder="Ingresa caracteres aquí"
-            className="p-2 border border-gray-400 rounded"
-          />
           <VariablesPanel variables={[{ name: 'x', value: 5 }, { name: 'y', value: 10 }]} />
         </div>
 
