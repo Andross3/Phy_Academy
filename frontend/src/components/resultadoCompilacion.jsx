@@ -9,7 +9,8 @@ export default function ResultadoCompilacion({ resultado }) {
   const [mostrarPython, setMostrarPython] = useState(false);
   const [userCode, setUserCode] = useState('');
   const [output, setOutput] = useState('');
-  const response = await fetch('http://localhost:5000/run-code', {
+  async function response() {
+    const response = await fetch('http://localhost:5000/run-code', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ code: userCode })
@@ -17,7 +18,8 @@ export default function ResultadoCompilacion({ resultado }) {
 
     const data = await response.json();
     setOutput(data.output);
-  
+  }
+
 
   return (
     <>

@@ -4,7 +4,7 @@ import Editor from "react-simple-code-editor";
 import Prism from "prismjs";
 import { FaPython } from "react-icons/fa";
 import "prismjs/components/prism-python";
-import 'prismjs/themes/prism-okaidia.css'; // Puedes cambiar el tema
+import 'prismjs/themes/prism-okaidia.css'; 
 
 const EntradaCodigo = ({ onChangeCode }) => {
   const [code, setCode] = useState("");
