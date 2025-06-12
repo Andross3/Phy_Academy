@@ -1,9 +1,13 @@
 FROM python:3.10-slim
 
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+RUN useradd -ms /bin/bash sandboxuser
+WORKDIR /home/sandboxuser 
 
-RUN useradd -m admin
-USER admin
+COPY ./Container/main.py ./main.py
+RUN chmod +x main.py 
 
-WORKDIR /compilacion
+RUN pip install flask==3.1.0
+
+USER sandboxuser
+
+CMD [ "python", "main.py" ]
