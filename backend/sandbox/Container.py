@@ -31,7 +31,7 @@ class Contenedor:
     def set_ip(self, newIP):
         self.ip = newIP
 # limpiar contenedor
-    def clean_up(self):
+    def limpiar_contenedor(self):
         if self.limpio == True:
             print('esta limpio')
         else:
