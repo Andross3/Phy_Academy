@@ -9,9 +9,11 @@ class AdminSandbox:
         self.contenedores_disponibles = []
         self.contenedores_listos = []
         self.tiempo_limite = 10
+        self.contenedores_fallados = [] # aqui va ir todo los contenedores fallados
+        self.numero_maximo = 2 #Esto para que solo haga un numeor de recursividad y no haya un bucle
 
 # Creamos el contenedor
-    def _crear_contenedor(self, cb):
+    def _crear_contenedor(self, cb, intentos = 0):
         try:
             contenedor_nuevo = self.cliente_docker.containers.create(
                 image='sandbox_phy_academy',
@@ -25,6 +27,20 @@ class AdminSandbox:
             self.contenedores_listos.append(contenedor)
         except ValueError as e:
             print(f'Error al crear contenedor: {e}')
+            if intentos < self.numero_maximo:
+                self._crear_contenedor(cb, intentos + 1)
+            else:
+                contenedores_fallados.append(cb)
+
+   #Esto intentara nuevamente crear contenedores,
+   #como vi que no estas creando bajo un numero ya no le coloque lo que es el conteo de contenedores,
+   #y la verificacion de que no sobrepasen lo que son el numero de contenedores
+    def reintentar_creacion(self)
+        if len(self.contenedores_fallados) > 0:
+            for cb in self.contenedores_fallados:
+                self._crear_contenedor(cb, intentos = 0)
+            self.contenedores_fallados.clear()
+
             
 # Registrar contenedores creados a lista de disponibles
     def registrar_contenedor(self, contenedor):
