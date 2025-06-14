@@ -9,7 +9,6 @@ from backend.app.routes.docente_routes import docente_bp  # Importa tu blueprint
 from backend.app.routes.estudiante_routes import estudiante_bp
 from flask_migrate import Migrate
 
-
 app = Flask(__name__)
 CORS(app) 
 iniciar_base_datos(app)
