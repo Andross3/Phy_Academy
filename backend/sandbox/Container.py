@@ -8,14 +8,15 @@ class Contenedor:
         self.limpio = False
 # ejecuta el codigo en un contenedor
     def ejecutar_codigo(self, codigo):
-        url_sandbox = f'http://{self.ip}:8080/' # ver esto mas 
+        # url_sandbox = f'http://192.168.0.3:3000/' # en produccion
+        url_sandbox = f'http://localhost:3000/' # en pruebas
         payload = {
             "code": codigo,
             "timeoutMs": 1000,
         }
         
         try:
-            respuesta = requests.post(url=url_sandbox, json=payload, timeout=2)
+            respuesta = requests.post(url=url_sandbox, json=payload, timeout=5)
             respuesta.raise_for_status()
             data = respuesta.json()
             return data
