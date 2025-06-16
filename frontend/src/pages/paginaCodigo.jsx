@@ -9,68 +9,32 @@ const BACKEND_URL = "http://localhost:5000";
 const PALABRAS_PROHIBIDAS = ["while", "for", "import"]; // <-- Añade las que quieras
 
 const PaginaCodigo = () => {
-  const [codigo, setCodigo] = useState("");
-  const [resultado, setResultado] = useState("");
-  const [score, setScore] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [errorConn, setErrorConn] = useState(null);
-  const [erroresRestriccion, setErroresRestriccion] = useState([]);
+  const [resultado, setResultado] = useState('');
+  const [codigo, setCodigo] = useState('');
 
-  // Valida palabras prohibidas y retorna array de errores {mensaje, linea}
-  const validarRestricciones = (codigo) => {
-    const errores = [];
-    PALABRAS_PROHIBIDAS.forEach(palabra => {
-      const regex = new RegExp(`\\b${palabra}\\b`, "g");
-      const lineas = codigo.split("\n");
-      lineas.forEach((linea, idx) => {
-        if (regex.test(linea)) {
-          errores.push({
-            mensaje: `Uso prohibido de "${palabra}"`,
-            linea: idx + 1
-          });
-        }
-      });
-    });
-    return errores;
-  };
-
-  const manejarCompilacion = async () => {
-    setLoading(true);
-    setErrorConn(null);
-    setResultado("");
-    setScore(null);
-
-    // Validación frontend
-    const errores = validarRestricciones(codigo);
-    setErroresRestriccion(errores);
-    if (errores.length > 0) {
-      setLoading(false);
-      setResultado("¡No puedes usar palabras prohibidas!");
-      setScore(0);
-      return;
-    }
-
-    try {
-      const res = await fetch(`${BACKEND_URL}/compile`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ codigo }),
+  const manejarCompilacion = () => {
+    // console.log(codigo);
+    fetch("http://127.0.0.1:5000/ejecutar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ codigo }) 
+    })
+      .then(response => response.json())
+      .then(data => {
+        setResultado(data.mensaje);
+      })
+      .catch(error => {
+        setResultado("Error al conectar con el backend: " + error.message);
       });
 
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Error desconocido");
-      }
-
-      const errores = (data.errores || "").trim();
-      setResultado(errores);
-      setScore(errores === "" ? 1 : 0);
-    } catch (err) {
-      setErrorConn(err.message);
-      setScore(0);
-    } finally {
-      setLoading(false);
-    }
+  //   const errores = `
+  // Error: línea 12: 'x' no está definido
+  // Error: línea 18: se esperaba ';'
+  // Error: línea 25: tipo de datos incompatible
+  //     `;
+    // setResultado(errores);
   };
 
   return (
