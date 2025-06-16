@@ -40,9 +40,13 @@ export default function App() {
           {role === "estudiante" && (
             <Route path="/estudiante" element={<EstudianteHome />} />
           )}
-          {role === "docente" && (
+          
+           {role === "docente" && (
             <Route path="/docente" element={<DocenteHome />} />
-          )}
+           )}
+           
+          <Route path="/docente" element={<DocenteHome />} />
+
 
           {role === "estudiante" && <Route path="*" element={<Navigate to="/estudiante" />} />}
           {role === "docente" && <Route path="*" element={<Navigate to="/docente" />} />}
