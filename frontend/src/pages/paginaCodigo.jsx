@@ -6,6 +6,7 @@ import ArchivoCompilador from "../components/archivoCompilador";
 import BarraFunciones from "../components/barraFunciones";
 
 const BACKEND_URL = "http://localhost:5000";
+const PALABRAS_PROHIBIDAS = ["while", "for", "import"]; // <-- Añade las que quieras
 
 const PaginaCodigo = () => {
   const [codigo, setCodigo] = useState("");
@@ -13,12 +14,41 @@ const PaginaCodigo = () => {
   const [score, setScore] = useState(null);
   const [loading, setLoading] = useState(false);
   const [errorConn, setErrorConn] = useState(null);
+  const [erroresRestriccion, setErroresRestriccion] = useState([]);
+
+  // Valida palabras prohibidas y retorna array de errores {mensaje, linea}
+  const validarRestricciones = (codigo) => {
+    const errores = [];
+    PALABRAS_PROHIBIDAS.forEach(palabra => {
+      const regex = new RegExp(`\\b${palabra}\\b`, "g");
+      const lineas = codigo.split("\n");
+      lineas.forEach((linea, idx) => {
+        if (regex.test(linea)) {
+          errores.push({
+            mensaje: `Uso prohibido de "${palabra}"`,
+            linea: idx + 1
+          });
+        }
+      });
+    });
+    return errores;
+  };
 
   const manejarCompilacion = async () => {
     setLoading(true);
     setErrorConn(null);
     setResultado("");
     setScore(null);
+
+    // Validación frontend
+    const errores = validarRestricciones(codigo);
+    setErroresRestriccion(errores);
+    if (errores.length > 0) {
+      setLoading(false);
+      setResultado("¡No puedes usar palabras prohibidas!");
+      setScore(0);
+      return;
+    }
 
     try {
       const res = await fetch(`${BACKEND_URL}/compile`, {
@@ -90,8 +120,15 @@ const PaginaCodigo = () => {
         {/* Columna central: funciones, editor y resultados */}
         <div className="flex flex-col gap-4">
           <BarraFunciones onCompilar={manejarCompilacion} />
-          <EntradaCodigo onChangeCode={setCodigo} value={codigo} />
-          <ResultadoCompilacion resultado={resultado} />
+          <EntradaCodigo
+            onChangeCode={setCodigo}
+            value={codigo}
+            restricciones={PALABRAS_PROHIBIDAS}
+          />
+          <ResultadoCompilacion
+            resultado={resultado}
+            erroresRestriccion={erroresRestriccion}
+          />
         </div>
 
         {/* Columna derecha: entrada adicional (placeholder) */}

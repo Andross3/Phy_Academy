@@ -26,3 +26,4 @@ const ResultadoCompilacion = ({ resultado, erroresRestriccion }) => {
     </div>
   );
 };
+export default ResultadoCompilacion;
