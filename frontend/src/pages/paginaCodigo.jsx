@@ -12,18 +12,28 @@ const PaginaCodigo = () => {
   const [codigo, setCodigo] = useState('');
 
   const manejarCompilacion = () => {
-    console.log(codigo);
+    // console.log(codigo);
+    fetch("http://127.0.0.1:5000/ejecutar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ codigo }) 
+    })
+      .then(response => response.json())
+      .then(data => {
+        setResultado(data.mensaje);
+      })
+      .catch(error => {
+        setResultado("Error al conectar con el backend: " + error.message);
+      });
 
-    // fetch("http://127.0.0.1:5000/compilar", 
-    //   method 
-    // )
-
-    const errores = `
-  Error: línea 12: 'x' no está definido
-  Error: línea 18: se esperaba ';'
-  Error: línea 25: tipo de datos incompatible
-      `;
-    setResultado(errores);
+  //   const errores = `
+  // Error: línea 12: 'x' no está definido
+  // Error: línea 18: se esperaba ';'
+  // Error: línea 25: tipo de datos incompatible
+  //     `;
+    // setResultado(errores);
   };
   return (
     <div className="p-2 text-white">
