@@ -1,34 +1,56 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { useState } from "react";
+import EstudianteHome from "./pages/EstudianteHome";
+import DocenteHome from "./pages/DocenteHome";
+import LoginForm from "./components/auth/LoginForm.jsx";
+import Home from "./pages/Home.jsx";
+import PaginaCodigo from "./pages/paginaCodigo.jsx";
+import Layout from "./routes/Layout.jsx";
+import EstudiantePage from "./pages/EstudiantePage.jsx";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [role, setRole] = useState(null);
+
+  const handleLogin = async (email) => {
+    try {
+      const res = await fetch("http://127.0.0.1:5000/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setRole(data.role);
+      } else {
+        alert(data.error);
+      }
+    } catch (err) {
+      alert("Error de conexión con el backend.");
+    }
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1 className='bg-red-500'>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <Router>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route path="/" element={<Home />} />
 
-export default App
+          <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
+
+          {role === "estudiante" && (
+            <Route path="/estudiante" element={<EstudianteHome />} />
+          )}
+          {role === "docente" && (
+            <Route path="/docente" element={<DocenteHome />} />
+          )}
+
+          {role === "estudiante" && <Route path="*" element={<Navigate to="/estudiante" />} />}
+          {role === "docente" && <Route path="*" element={<Navigate to="/docente" />} />}
+
+          <Route path="paginaCodigo" element={<PaginaCodigo />}></Route>
+          <Route path="page/estudiante" element={<EstudiantePage />}></Route>
+        </Route>
+      </Routes>
+    </Router>
+  );
+}
