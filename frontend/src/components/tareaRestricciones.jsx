@@ -1,40 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 const RESTRICCIONES = [
-  'if',
-  'else',
-  'elif',
-  'x if condition else y',
-  'if condition1 and condition2',
-  'if condition1 or condition2',
-  'if not condition',
-  'if condition: if other_condition:',
-  'if a == b',
-  'if a != b',
-  'if a > b',
-  'if a < b',
-  'if a >= b',
-  'if a <= b',
-  'if item in collection',
-  'if item not in collection',
-  'if a is b',
-  'if a is not b',
-  'if variable',
-  'if not lista',
-  'if all([cond1, cond2])',
-  'if any([cond1, cond2])',
-  '(lambda x: x > 10)(valor)',
-  '[x for x in lista if x > 0]',
-  'while',
-  'for',
-  'break',
-  'continue',
-  'try/except',
-  'assert',
+  'if', 'else', 'elif', 'x if condition else y', 'if condition1 and condition2', 'if condition1 or condition2',
+  'if not condition', 'if condition: if other_condition:', 'if a == b', 'if a != b', 'if a > b', 'if a < b',
+  'if a >= b', 'if a <= b', 'if item in collection', 'if item not in collection', 'if a is b', 'if a is not b',
+  'if variable', 'if not lista', 'if all([cond1, cond2])', 'if any([cond1, cond2])', '(lambda x: x > 10)(valor)',
+  '[x for x in lista if x > 0]', 'while', 'for', 'break', 'continue', 'try/except', 'assert',
 ];
 
-export default function TareaRestricciones() {
-  const [restricciones, setRestricciones] = useState([]);
+export default function TareaRestricciones({ setRestricciones }) {
+  const [restricciones, setLocalRestricciones] = useState([]);
   const [open, setOpen] = useState(false);
   const selectRef = useRef(null);
 
@@ -50,13 +25,17 @@ export default function TareaRestricciones() {
 
   const handleAdd = (restric) => {
     if (!restricciones.includes(restric)) {
-      setRestricciones([...restricciones, restric]);
+      const newRestricciones = [...restricciones, restric];
+      setLocalRestricciones(newRestricciones);
+      setRestricciones(newRestricciones);  // Aquí actualizas el estado en el componente principal
     }
     setOpen(false);
   };
 
   const handleRemove = (restric) => {
-    setRestricciones(restricciones.filter(r => r !== restric));
+    const newRestricciones = restricciones.filter(r => r !== restric);
+    setLocalRestricciones(newRestricciones);
+    setRestricciones(newRestricciones);  // Aquí actualizas el estado en el componente principal
   };
 
   return (
@@ -109,4 +88,4 @@ export default function TareaRestricciones() {
       </div>
     </div>
   );
-} 
+}

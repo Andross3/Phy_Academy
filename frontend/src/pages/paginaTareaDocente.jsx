@@ -25,6 +25,8 @@ export default function PaginaTareaDocente() {
   const [tipoTarea, setTipoTarea] = useState('');
   const [open, setOpen] = useState(false);
   const selectRef = useRef(null);
+  const [restricciones, setRestricciones] = useState([]); 
+  const [codigo, setCodigo] = useState(''); //para almacenar el codigo
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -37,6 +39,41 @@ export default function PaginaTareaDocente() {
   }, []);
 
   const selectedOption = opciones.find(opt => opt.value === tipoTarea);
+
+  const imprimirValores = () => {
+    console.log("Descripcion:", descripcion);
+    console.log("Tipo de Tarea:", tipoTarea);
+    console.log("Restricciones seleccionadas:", restricciones);
+    // console.log("Código de la plantilla:", codigo);
+  };
+
+  const enviarDatos = async () => {
+    const datos = {
+      descripcion,
+      tipoTarea,
+      restricciones,
+    };
+
+    try {
+      const response = await fetch('http://localhost:5000/api/tareas', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(datos),
+      });
+
+      if (response.ok) {
+        const jsonResponse = await response.json();
+        console.log('Datos enviados correctamente:', jsonResponse);
+      } else {
+        console.error('Error al enviar los datos:', response.status);
+      }
+    } catch (error) {
+      console.error('Error al enviar la solicitud:', error);
+    }
+  };
+
 
   return (
     <div className="max-w-xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-md border">
@@ -77,7 +114,7 @@ export default function PaginaTareaDocente() {
         </div>
       </div>
       <div className="mt-8">
-        {tipoTarea === 'restricciones' && <TareaRestricciones />}
+        {tipoTarea === 'restricciones' && <TareaRestricciones setRestricciones={setRestricciones}/>}
         {tipoTarea === 'plantilla' && <TareaPlantilla />}
       </div>
       <div className="flex space-x-4 mt-8 justify-end">
@@ -85,6 +122,8 @@ export default function PaginaTareaDocente() {
         <button
           className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-900 disabled:opacity-50"
           disabled={!tipoTarea}
+          // onClick={imprimirValores}
+          onClick={enviarDatos}
         >
           Publicar
         </button>
