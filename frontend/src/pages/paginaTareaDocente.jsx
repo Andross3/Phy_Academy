@@ -241,7 +241,7 @@ export default function PaginaTareaDocente() {
       </div>
 
       <div className="mt-8">
-        {tipoTarea === 'restricciones' && <TareaRestricciones />}
+        {tipoTarea === 'restricciones' && <TareaRestricciones setRestricciones={setRestricciones}/>}
         {tipoTarea === 'plantilla' && <TareaPlantilla />}
         {tipoTarea === 'restricciones' && <TareaRestricciones setRestricciones={setRestricciones}/>}
         {tipoTarea === 'plantilla' && <TareaPlantilla setCodigo={setCodigo} />}
@@ -258,6 +258,8 @@ export default function PaginaTareaDocente() {
         <button
           className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-900 disabled:opacity-50"
           disabled={!tipoTarea}
+          // onClick={imprimirValores}
+          onClick={enviarDatos}
         >
           {isSubmitting ? 'Enviando...' : 'Publicar'}
         </button>
