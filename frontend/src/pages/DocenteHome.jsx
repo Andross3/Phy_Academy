@@ -1,8 +1,9 @@
 export default function DocenteHome() {
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold">Bienvenido Docente</h1>
-      <p>Aquí podrás subir tus cursos próximamente.</p>
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="bg-white bg-opacity-90 p-8 rounded-xl shadow-lg text-center max-w-md">
+        <h1 className="text-3xl font-bold text-gray-800 mb-4">Bienvenido Docente</h1>
+        </div>
     </div>
   );
 }
