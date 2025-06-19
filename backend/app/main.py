@@ -4,31 +4,35 @@ from backend.app.core.database import iniciar_base_datos
 from backend.app.core.extensions import db
 from backend.app.routes.auth_routes import auth_bp
 from backend.app.routes.ejecutador_routes import ejecutador_bp
-from backend.app.routes.tareas_routes import tarea_bp  # Importa tarea_bp
+from backend.app.routes.tareas_routes import tarea_bp
 from flask_migrate import Migrate
-
-app = Flask(__name__)
-CORS(app)  # Para permitir llamadas desde el frontend
-iniciar_base_datos(app)
-migrate = Migrate(app, db)
-#registrar los Blueprints de las rutas
-app.register_blueprint(auth_bp)
-app.register_blueprint(ejecutador_bp)
-migrate = Migrate()
 
 def create_app():
     app = Flask(__name__)
     CORS(app)
-    iniciar_base_datos(app)   # esto ya hace db.init_app(app)
-    migrate.init_app(app, db)
-
+    
+    # Configuración básica
+    app.config['JSON_AS_ASCII'] = False
+    
+    # Inicializar base de datos
+    iniciar_base_datos(app)
+    
+    # Configurar migración
+    migrate = Migrate(app, db)
+    
+    # Registrar blueprints
     app.register_blueprint(auth_bp)
     app.register_blueprint(ejecutador_bp)
     app.register_blueprint(tarea_bp)
-
+    
+    # Ruta de prueba
+    @app.route('/')
+    def home():
+        return jsonify({"message": "API is running"})
+    
     return app
 
-# Solo para desarrollo local (opcional)
+app = create_app()
+
 if __name__ == "__main__":
-    app = create_app()
     app.run(debug=True)

@@ -242,8 +242,6 @@ export default function PaginaTareaDocente() {
 
       <div className="mt-8">
         {tipoTarea === 'restricciones' && <TareaRestricciones setRestricciones={setRestricciones}/>}
-        {tipoTarea === 'plantilla' && <TareaPlantilla />}
-        {tipoTarea === 'restricciones' && <TareaRestricciones setRestricciones={setRestricciones}/>}
         {tipoTarea === 'plantilla' && <TareaPlantilla setCodigo={setCodigo} />}
       </div>
 
