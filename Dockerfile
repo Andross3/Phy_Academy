@@ -48,4 +48,4 @@ COPY --from=frontend /app/dist ./frontend/dist
 
 ENV FLASK_APP=backend.app.main:app
 
-CMD flask db upgrade && gunicorn --bind 0.0.0.0:${PORT} backend.app.main:app
+CMD ["sh", "-c", "flask db upgrade && gunicorn --bind 0.0.0.0:$PORT backend.app.main:app"]
