@@ -21,6 +21,7 @@ def ejecutar_codigo(request):
             'mensaje': f"El código contiene una palabra reservada no permitida: '{palabra_detectada}'",
             'autorizado': False
         }), 400
+        
 
     sandbox_prueba = Sandbox(1, codigo)
     sandbox_prueba.correr_codigo()
@@ -32,3 +33,4 @@ def ejecutar_codigo(request):
         'mensaje': mensaje,
         'autorizado': True
     }), 200
+    

@@ -15,7 +15,7 @@ export default function LoginForm({ onLogin }) {
     if (emailNormalized.endsWith("@est.com")) {
       navigate("/estudiante");
     } else if (emailNormalized.endsWith("@doc.com")) {
-      navigate("/docente");
+      navigate("/paginaTareaDocente");
     }
   };
 

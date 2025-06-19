@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import EntradaCodigo from "../components/entradaCodigo";
 import ArchivoCompilador from "../components/archivoCompilador";
 import BarraFunciones from "../components/barraFunciones";
+import VariablesPanel from "../components/variablesPanel"; // importa el nuevo componente
 
 const PaginaCodigo = () => {
   const [resultado, setResultado] = useState('');
@@ -49,9 +50,11 @@ const PaginaCodigo = () => {
           <EntradaCodigo onChangeCode={setCodigo}></EntradaCodigo>
           <ResultadoCompilacion resultado={resultado} />
         </div>
-        <div className="row-span-3">
-          <input type="text" placeholder="Ingresa caracteres aquí" className="p-2 border border-gray-400 rounded" />
+        <div className="row-span-3 flex flex-col gap-2">
+          <VariablesPanel variables={[{ name: 'x', value: 5 }, { name: 'y', value: 10 }]} />
         </div>
+
+        
       </div>
     </div>
   );

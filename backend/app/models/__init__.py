@@ -1,1 +1,5 @@
-# from .estudiante_model import Estudiante
+from .tarea_models import Tarea
+
+__all__ = [
+    'Tarea'
+]

@@ -7,6 +7,19 @@ import { FaAnglesRight } from "react-icons/fa6";
 export default function ResultadoCompilacion({ resultado }) {
   const [mostrarShell, setMostrarShell] = useState(false);
   const [mostrarPython, setMostrarPython] = useState(false);
+  const [userCode, setUserCode] = useState('');
+  const [output, setOutput] = useState('');
+  async function response() {
+    const response = await fetch('http://localhost:5000/run-code', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code: userCode })
+    });
+
+    const data = await response.json();
+    setOutput(data.output);
+  }
+
 
   return (
     <>
