@@ -21,7 +21,7 @@ const ArchivoCompilador = () => {
                 <i class="bi bi-person-workspace"></i>
             <h2 className='text-xl font-bold text-gray-50'>Archivos en los que trabajo</h2>
             </div>
-           <div className="mt-4">
+            <div className="mt-4">
                 {archivosEjemplo.map((archivo, index) => (
                     <div key={index} className="border border-gray-600 p-3 rounded-md mb-2">
                         <button
