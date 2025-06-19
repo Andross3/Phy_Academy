@@ -1,5 +1,6 @@
 import os, re
 import subprocess
+import logging
 
 class Compilar_Codigo:
 
@@ -26,10 +27,8 @@ class Compilar_Codigo:
         lineas_error = re.findall(r'File ".*", line (\d+)', texto_error_capturado)
         tipo_error = re.search(r'(\w+Error|Exception): (.+)', texto_error_capturado)
         descripcion_error = tipo_error.group(2) if tipo_error else texto_error_capturado.strip()
-
-        print(f'Linea: {lineas_error[-1]}')
-        print(f'Tipo: {tipo_error.group(1)}')
-        print(f'Descripcion del error: {descripcion_error}')
+        
+        print("Hola")
 
 codigo = """
 x=x/0"""

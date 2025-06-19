@@ -10,6 +10,7 @@ import VariablesPanel from "../components/variablesPanel"; // importa el nuevo c
 const PaginaCodigo = () => {
   const [resultado, setResultado] = useState('');
   const [codigo, setCodigo] = useState('');
+  const [variables, setVariables] = useState([]);
 
   const manejarCompilacion = () => {
     // console.log(codigo);
@@ -18,22 +19,40 @@ const PaginaCodigo = () => {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ codigo }) 
+      body: JSON.stringify({ codigo })
     })
       .then(response => response.json())
       .then(data => {
         setResultado(data.mensaje);
+        console.log("Resulttado", data.mensaje)
       })
       .catch(error => {
         setResultado("Error al conectar con el backend: " + error.message);
       });
 
-  //   const errores = `
-  // Error: línea 12: 'x' no está definido
-  // Error: línea 18: se esperaba ';'
-  // Error: línea 25: tipo de datos incompatible
-  //     `;
-    // setResultado(errores);
+
+  };
+
+  const manejarVariables = () => {
+    // console.log(codigo);
+    fetch("http://127.0.0.1:5000/extraer-variables", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ codigo })
+    })
+      .then(response => response.json())
+      .then(data => {
+        setVariables(data.variables);
+        console.log("Variables extraídas:", data.variables);
+      })
+      .catch(error => {
+        console.error("Error al conectar con el backend:", error.message);
+        setVariables([]);
+      });
+
+
   };
   return (
     <div className="p-2 text-white">
@@ -46,15 +65,15 @@ const PaginaCodigo = () => {
           <ArchivoCompilador></ArchivoCompilador>
         </div>
         <div className="flex flex-col gap-3">
-          <BarraFunciones onCompilar={manejarCompilacion} ></BarraFunciones>
+          <BarraFunciones onCompilar={manejarCompilacion} onExtraerVariables={manejarVariables}></BarraFunciones>
           <EntradaCodigo onChangeCode={setCodigo}></EntradaCodigo>
           <ResultadoCompilacion resultado={resultado} />
         </div>
         <div className="row-span-3 flex flex-col gap-2">
-          <VariablesPanel variables={[{ name: 'x', value: 5 }, { name: 'y', value: 10 }]} />
+          <VariablesPanel variables={variables} />
         </div>
 
-        
+
       </div>
     </div>
   );

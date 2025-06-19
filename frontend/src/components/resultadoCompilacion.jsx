@@ -1,11 +1,11 @@
 import React from "react";
 import { useState } from "react";
 import { FaCode } from "react-icons/fa";
-import { TbBrandPowershell } from "react-icons/tb";
+import { TbBrandPowershell, TbRubberStampOff } from "react-icons/tb";
 import { FaAnglesRight } from "react-icons/fa6";
 
 export default function ResultadoCompilacion({ resultado }) {
-  const [mostrarShell, setMostrarShell] = useState(false);
+  const [mostrarShell, setMostrarShell] = useState(TbRubberStampOff);
   const [mostrarPython, setMostrarPython] = useState(false);
   const [userCode, setUserCode] = useState('');
   const [output, setOutput] = useState('');
@@ -47,8 +47,12 @@ export default function ResultadoCompilacion({ resultado }) {
         </div>
         <div className=" border-amber-50 border-2 bg-gray-200">
           {mostrarShell && (
-            <div className="p-4 text-gray-800 w-full h-[120px] overflow-auto border border-black">
-              {resultado ? resultado : 'Respuesta del programa'}
+            <div className={`p-4 w-full h-[120px] overflow-auto border border-black ${resultado?.includes("Error") ? "text-red-600" : "text-blue-900"
+              }`}>
+              <p style={{ whiteSpace: "pre-line"}}>
+                {resultado ? resultado : 'Respuesta del programa'}
+              </p>
+
             </div>
           )}
           {mostrarPython && (
