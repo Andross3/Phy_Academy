@@ -25,7 +25,17 @@ export default function App() {
       )}
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Home onRegisterClick={() => setMostrarModalRol(true)} />} />
+          <Route
+            index
+            element={
+              <>
+                <Home onRegisterClick={() => setMostrarModalRol(true)} />
+                {mostrarModalRol && (
+                  <SeleccionRolModal onSeleccion={() => setMostrarModalRol(false)} />
+                )}
+              </>
+            }
+          />
           <Route path="login" element={<LoginForm />} />
           <Route path="docente" element={<DocenteHome />} />
           <Route path="estudiante" element={<EstudianteHome />} />
