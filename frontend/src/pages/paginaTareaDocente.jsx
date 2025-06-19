@@ -127,7 +127,6 @@ export default function PaginaTareaDocente() {
 
     try {
       console.log('Enviando datos:', datos);
-
       const response = await fetch('http://localhost:5000/api/tareas', {
         method: 'POST',
         headers: {

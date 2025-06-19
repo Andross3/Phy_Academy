@@ -13,7 +13,7 @@ const PaginaCodigo = () => {
 
   const manejarCompilacion = () => {
     // console.log(codigo);
-    fetch("http://127.0.0.1:5000/ejecutar", {
+    fetch(`/ejecutar`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
