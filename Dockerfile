@@ -34,8 +34,8 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-ENV PORT=8080
-EXPOSE 8080
+ENV PORT=8090
+EXPOSE 8090
 
 COPY --from=backend /usr/local/lib/python3.11 /usr/local/lib/python3.11
 COPY --from=backend /usr/local/bin /usr/local/bin
