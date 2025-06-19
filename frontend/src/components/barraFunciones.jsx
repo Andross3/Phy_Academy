@@ -4,10 +4,13 @@ import { TfiSave } from "react-icons/tfi";
 import { MdCleaningServices } from "react-icons/md";
 
 
-const BarraFunciones = ({ onCompilar }) => {
+const BarraFunciones = ({ onCompilar, onExtraerVariables }) => {
   return (
     <div className='flex flex-row gap-2 h-[40px] border border-amber-50 rounded-sm'>
-      <button  onClick={onCompilar} className="hover:bg-gray-100/20 p-2 ml-10 rounded-xl text-center" title="Compilar">
+      <button onClick={() => {
+        onCompilar();
+        onExtraerVariables();
+      }} className="hover:bg-gray-100/20 p-2 ml-10 rounded-xl text-center" title="Compilar">
         <FaPlay size={20} className="hover:text-sky-700 text-white" />
       </button>
 
