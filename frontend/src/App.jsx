@@ -7,6 +7,7 @@ import Home from "./pages/Home.jsx";
 import PaginaCodigo from "./pages/paginaCodigo.jsx";
 import Layout from "./routes/Layout.jsx";
 import EstudiantePage from "./pages/EstudiantePage.jsx";
+import PaginaTareaDocente from "./pages/paginaTareaDocente.jsx";
 
 export default function App() {
   const [role, setRole] = useState(null);
@@ -53,6 +54,7 @@ export default function App() {
 
           <Route path="paginaCodigo" element={<PaginaCodigo />}></Route>
           <Route path="page/estudiante" element={<EstudiantePage />}></Route>
+          <Route path="paginaTareaDocente" element={<PaginaTareaDocente />} />
         </Route>
       </Routes>
     </Router>
