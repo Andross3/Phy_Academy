@@ -1,10 +1,9 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-//const API_URL = import.meta.env.VITE_API_URL;
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState(""); // Nuevo estado para contraseña
   const navigate = useNavigate();
   const profileImage = "/IconoPerfil.png";
 
@@ -14,7 +13,7 @@ export default function LoginForm() {
       const res = await fetch(`/api/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, password }),
       });
 
       const data = await res.json();
@@ -60,6 +59,16 @@ export default function LoginForm() {
                   placeholder="Correo"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+              </div>
+              <div>
+                <input
+                  type="password"
+                  placeholder="Contraseña"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
