@@ -21,3 +21,5 @@ venv\Scripts\activate
 ```
 pip install -r requirements.txt
 ```
+5. 
+flask run

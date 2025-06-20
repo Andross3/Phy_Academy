@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const StarryBackground = () => {
   const canvasRef = useRef(null);
@@ -24,8 +25,7 @@ const StarryBackground = () => {
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // Draw stars
+
       stars.forEach(star => {
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
@@ -38,7 +38,6 @@ const StarryBackground = () => {
 
     animate();
 
-    // Resize handler
     const handleResize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -52,15 +51,14 @@ const StarryBackground = () => {
   }, []);
 
   return (
-    <canvas 
-      ref={canvasRef} 
+    <canvas
+      ref={canvasRef}
       className="fixed top-0 left-0 z-0 bg-black w-full h-full"
     />
   );
 };
 
 const CourseCard = ({ level, title, description, students, rating }) => {
-  // Determine background color based on level
   const levelBgColor = {
     'Principiante': 'bg-green-500',
     'Intermedio': 'bg-blue-400',
@@ -89,17 +87,17 @@ const CourseCard = ({ level, title, description, students, rating }) => {
       </div>
       <div className="flex mt-2">
         {[...Array(5)].map((_, i) => (
-          <svg 
-            key={i} 
-            xmlns="http://www.w3.org/2000/svg" 
-            width="16" 
-            height="16" 
-            viewBox="0 0 24 24" 
-            fill={i < rating ? "currentColor" : "none"} 
-            stroke="currentColor" 
-            strokeWidth="2" 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
+          <svg
+            key={i}
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill={i < rating ? "currentColor" : "none"}
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             className={i < rating ? 'text-yellow-400' : 'text-gray-500'}
           >
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
@@ -114,6 +112,7 @@ export default function EstudianteHome() {
   const [typedText, setTypedText] = useState('');
   const fullText = 'Bienvenido Estudiante';
   const [isTyping, setIsTyping] = useState(true);
+  const navigate = useNavigate();
 
   const courses = [
     {
@@ -138,7 +137,7 @@ export default function EstudianteHome() {
       rating: 4
     }
   ];
-  
+
   useEffect(() => {
     if (isTyping && typedText.length < fullText.length) {
       const typingTimer = setTimeout(() => {
@@ -155,29 +154,29 @@ export default function EstudianteHome() {
     <div className="min-h-screen flex flex-col items-center relative py-10">
       <StarryBackground />
       <div className="text-center z-10 relative">
-        <h1 
-          className="text-5xl text-white font-mono font-bold"
-        >
+        <h1 className="text-5xl text-white font-mono font-bold">
           {typedText}
           {isTyping && (
-            <span 
-              className="inline-block ml-2 animate-blink text-white"
-            >
-              |
-            </span>
+            <span className="inline-block ml-2 animate-blink text-white">|</span>
           )}
         </h1>
-        <div 
-          className="text-white mt-2 mb-10 font-mono"
-        >
+        <div className="text-white mt-2 mb-10 font-mono">
           Explora nuestros cursos y comienza tu aprendizaje en programación.
         </div>
+
+        {/* Botón visible */}
+        <button
+          onClick={() => navigate('/paginaCodigo')}
+          className="bg-white text-black font-bold py-2 px-6 rounded hover:bg-gray-200 transition mb-10"
+        >
+          Entrar
+        </button>
 
         <div className="mb-10">
           <h2 className="text-white text-3xl font-mono mb-8">Mis Cursos</h2>
           <div className="flex flex-wrap gap-6 justify-center">
             {courses.map((course, index) => (
-              <CourseCard 
+              <CourseCard
                 key={index}
                 level={course.level}
                 title={course.title}
@@ -189,18 +188,17 @@ export default function EstudianteHome() {
           </div>
         </div>
       </div>
-      <style>
-        {`
-          @keyframes blink {
-            0% { opacity: 0; }
-            50% { opacity: 1; }
-            100% { opacity: 0; }
-          }
-          .animate-blink {
-            animation: blink 0.7s infinite;
-          }
-        `}
-      </style>
+
+      <style>{`
+        @keyframes blink {
+          0% { opacity: 0; }
+          50% { opacity: 1; }
+          100% { opacity: 0; }
+        }
+        .animate-blink {
+          animation: blink 0.7s infinite;
+        }
+      `}</style>
     </div>
   );
 }
