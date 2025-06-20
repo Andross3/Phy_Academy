@@ -18,6 +18,7 @@ app = Flask(
     static_folder=os.path.abspath(os.path.join(os.path.dirname(__file__), '../../frontend/dist')),  # ruta relativa desde este archivo
     static_url_path="/"
 )
+print("Static folder:", app.static_folder)
 CORS(app)  # Para permitir llamadas desde el frontend
 iniciar_base_datos(app)
 migrate = Migrate(app, db)
@@ -40,11 +41,21 @@ def health_check():
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve_frontend(path):
-    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+    full_path = os.path.join(app.static_folder, path)
+    print(f"[serve_frontend] path requested: '{path}', exists: {os.path.exists(full_path)}")
+
+    if path != "" and os.path.exists(full_path) and not os.path.isdir(full_path):
+        print(f"[serve_frontend] Serving static file: {path}")
         return send_from_directory(app.static_folder, path)
     else:
+        print("[serve_frontend] Serving index.html")
         return send_from_directory(app.static_folder, 'index.html')
-    
+@app.errorhandler(404)
+def not_found(e):
+    print(f"[404 handler] Serving index.html for path: {request.path}")
+    return send_from_directory(app.static_folder, 'index.html')
+
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))  # usa PORT que da Railway, si no usa 5000
