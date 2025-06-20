@@ -1,6 +1,6 @@
-===============================
+
 Despliegue de Aplicación en Railway
-===============================
+
 
 Este proyecto utiliza un enfoque personalizado para desplegar una aplicación fullstack (Frontend con Node.js y Backend con Flask) en Railway mediante Docker.
 
