@@ -18,9 +18,9 @@ const BarraFunciones = ({ onCompilar, onExtraerVariables }) => {
         <TfiSave size={20} className="hover:text-sky-700" />
       </button>
 
-      <button className="hover:bg-gray-100/20 p-2 rounded-xl" title="Limpiar">
+      {/* <button className="hover:bg-gray-100/20 p-2 rounded-xl" title="Limpiar">
         <MdCleaningServices size={20} className="hover:text-sky-700" />
-      </button>
+      </button> */}
 
     </div>
   );
