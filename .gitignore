@@ -15,4 +15,4 @@ __pycache__/
 # Archivos log
 *.log
 # Migraciones
-/backend/migrations/
+#/backend/migrations/
