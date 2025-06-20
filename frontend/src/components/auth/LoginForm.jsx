@@ -1,21 +1,41 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function LoginForm({ onLogin }) {
+//const API_URL = import.meta.env.VITE_API_URL;
+
+export default function LoginForm() {
   const [email, setEmail] = useState("");
-  const profileImage = '/IconoPerfil.png';
   const navigate = useNavigate();
+  const profileImage = "/IconoPerfil.png";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const res = await fetch(`http://localhost:5000/api/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
 
-    await onLogin(email);
+      const data = await res.json();
 
-    const emailNormalized = email.trim().toLowerCase();
-    if (emailNormalized.endsWith("@est.com")) {
-      navigate("/estudiante");
-    } else if (emailNormalized.endsWith("@doc.com")) {
-      navigate("/paginaTareaDocente");
+      if (res.ok) {
+        if (data.role === "docente") 
+        {
+          navigate("/paginaTareaDocente");
+        }
+        else if (data.role === "estudiante") {
+          navigate("/estudiante");
+        }
+        else {
+          alert("Rol no reconocido.");
+        }
+      } else {
+        alert(data.error || "Error de autenticación.");
+      }
+    } catch (err) {
+      console.error("Error en login:", err);
+      alert("Error al conectar con el servidor.");
     }
   };
 
@@ -36,7 +56,10 @@ export default function LoginForm({ onLogin }) {
         </div>
 
         <div className="w-full max-w-md bg-white rounded-lg shadow-md overflow-hidden">
-          <form onSubmit={handleSubmit} className="flex flex-col items-center p-8">
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col items-center p-8"
+          >
             <div className="w-full space-y-4">
               <div>
                 <input
