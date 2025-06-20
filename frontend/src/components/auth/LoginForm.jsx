@@ -19,9 +19,16 @@ export default function LoginForm() {
       const data = await res.json();
 
       if (res.ok) {
-        if (data.role === "docente") navigate("/docente");
-        else if (data.role === "estudiante") navigate("/estudiante");
-        else alert("Rol no reconocido.");
+        if (data.role === "docente") 
+        {
+          navigate("/paginaTareaDocente");
+        }
+        else if (data.role === "estudiante") {
+          navigate("/estudiante");
+        }
+        else {
+          alert("Rol no reconocido.");
+        }
       } else {
         alert(data.error || "Error de autenticación.");
       }
