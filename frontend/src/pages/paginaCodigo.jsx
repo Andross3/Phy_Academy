@@ -15,20 +15,26 @@ const PaginaCodigo = () => {
   const [descripcion, setDescripcion] = useState('Hacer un programa que te devuelva ¡Hola Mundo!');
   const [restricciones, setRestricciones] = useState([]);
   const [codigoPlantilla, setCodigoPlantilla] = useState('');
+  const [tareaSeleccionada, setTareaSeleccionada] = useState(null);
 
   const manejarCompilacion = () => {
-    // console.log(codigo);
-    fetch(`/ejecutar`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ codigo })
-    })
-      .then(res => res.json())
-      .then(data => setResultado(data.mensaje))
-      .catch(err => setResultado("Error al conectar" + err.message));
-  };
+  if (!tareaSeleccionada?.id) {
+    setResultado("Selecciona una tarea antes de compilar.");
+    return;
+  }
+  fetch("http://127.0.0.1:5000/ejecutar", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    codigo,
+    tarea_id: tareaSeleccionada.id
+  })
+})
+    .then(res => res.json())
+    .then(data => setResultado(data.mensaje))
+    .catch(err => setResultado("Error al conectar: " + err.message));
+};
+
 
   const manejarSeleccionTarea = (idTarea) => {
     fetch(`http://127.0.0.1:5000/api/tareas/${idTarea}`)
@@ -41,6 +47,7 @@ const PaginaCodigo = () => {
         setRestricciones(data.restricciones || []);
         setCodigoPlantilla(data.codigo_plantilla || "");
         setCodigo(data.tipo_tarea === "plantilla" ? data.codigo_plantilla : "");
+        setTareaSeleccionada(data);
       })
       .catch(err => {
         setTitulo("Error al cargar tarea");
@@ -48,6 +55,7 @@ const PaginaCodigo = () => {
         setRestricciones([]);
         setCodigoPlantilla("");
         setCodigo("");
+        setTareaSeleccionada(null);
       });
   };
 
