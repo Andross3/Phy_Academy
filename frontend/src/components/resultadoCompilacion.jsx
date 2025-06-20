@@ -10,7 +10,7 @@ export default function ResultadoCompilacion({ resultado }) {
   const [userCode, setUserCode] = useState('');
   const [output, setOutput] = useState('');
   async function response() {
-    const response = await fetch('http://localhost:5000/run-code', {
+    const response = await fetch(`/run-code`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ code: userCode })

@@ -22,7 +22,7 @@ const PaginaCodigo = () => {
     setResultado("Selecciona una tarea antes de compilar.");
     return;
   }
-  fetch("http://127.0.0.1:5000/ejecutar", {
+  fetch(`/ejecutar`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
@@ -37,7 +37,7 @@ const PaginaCodigo = () => {
 
 
   const manejarSeleccionTarea = (idTarea) => {
-    fetch(`http://127.0.0.1:5000/api/tareas/${idTarea}`)
+    fetch(`/api/tareas/${idTarea}`)
       .then(async res => {
         const data = await res.json();
         if (!res.ok) throw new Error(data?.error || "Error al obtener tarea");
@@ -61,7 +61,7 @@ const PaginaCodigo = () => {
 
     const manejarVariables = () => {
     // console.log(codigo);
-    fetch("http://127.0.0.1:5000/extraer-variables", {
+    fetch(`/extraer-variables`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
