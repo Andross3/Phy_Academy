@@ -1,9 +1,9 @@
 import re
 from flask import request, jsonify
 from backend.sandbox.sandbox_interface import Sandbox
-from googletrans import Translator
+# from googletrans import Translator
 
-traductor = Translator()
+#traductor = Translator()
 from backend.app.models import Tarea
 
 def remover_cadenas(codigo):
@@ -54,14 +54,14 @@ def formatoErrores(texto_error_capturado):
     tipo = tipo_error.group(1) if tipo_error else "Error desconocido"
     descripcion = tipo_error.group(2) if tipo_error else texto_error_capturado.strip()
     #traduccion del ingles a español
-    tipo_es = traductor.translate(text=separar_palabras(tipo), src='en', dest='es')
-    descripcion_es = traductor.translate(text=descripcion, src='en', dest='es')
+    #tipo_es = traductor.translate(text=separar_palabras(tipo), src='en', dest='es')
+    #descripcion_es = traductor.translate(text=descripcion, src='en', dest='es')
 
     mensajeBonito = (
         f"Error:\n"
-        f"Tipo: {tipo_es.text}\n"
+        f"Tipo: {tipo}\n"
         f"Línea: {linea}\n"
-        f"Descripción: {descripcion_es.text}"
+        f"Descripción: {descripcion}"
     )
 
     return mensajeBonito
