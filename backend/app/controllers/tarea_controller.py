@@ -57,3 +57,42 @@ def guardar_tarea_controller(request):
         db.session.rollback()
         print(f"Error al guardar tarea: {str(e)}")
         return jsonify({'error': f'Error al guardar la tarea: {str(e)}'}), 500
+
+def obtener_tarea_por_id_controller(id):
+    try:
+        tarea = Tarea.query.get(id)
+        if not tarea:
+            return jsonify({'error': 'Tarea no encontrada'}), 404
+
+        return jsonify({
+            'id': tarea.id,
+            'titulo': tarea.titulo,
+            'descripcion': tarea.descripcion,
+            'tipo_tarea': tarea.tipo_tarea,
+            'restricciones': tarea.restricciones,
+            'codigo_plantilla': tarea.codigo_plantilla,
+            'fecha_entrega': tarea.fecha_entrega.isoformat() if tarea.fecha_entrega else None,
+            'hora_entrega': tarea.hora_entrega.isoformat() if tarea.hora_entrega else None
+        }), 200
+    except Exception as e:
+        return jsonify({'error': f'Error al obtener la tarea: {str(e)}'}), 500
+
+def obtener_tareas_controller():
+    try:
+        tareas = Tarea.query.all()
+        lista_tareas = []
+        for tarea in tareas:
+            lista_tareas.append({
+                'id': tarea.id,
+                'titulo': tarea.titulo,
+                'descripcion': tarea.descripcion,
+                'tipo_tarea': tarea.tipo_tarea,
+                'restricciones': tarea.restricciones,
+                'codigo_plantilla': tarea.codigo_plantilla,
+                'fecha_entrega': tarea.fecha_entrega.isoformat() if tarea.fecha_entrega else None,
+                'hora_entrega': tarea.hora_entrega.isoformat() if tarea.hora_entrega else None
+            })
+        return jsonify({'tareas': lista_tareas}), 200
+    except Exception as e:
+        print(f"Error al obtener tareas: {str(e)}")
+        return jsonify({'error': f'Error al obtener tareas: {str(e)}'}), 500
