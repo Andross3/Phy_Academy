@@ -19,9 +19,14 @@ export default function LoginForm() {
       const data = await res.json();
 
       if (res.ok) {
-        if (data.role === "docente") 
-        {
-          navigate("/paginaTareaDocente");
+        // Guarda los datos del usuario en localStorage
+        localStorage.setItem("userId", data.id);
+        localStorage.setItem("userRole", data.role);
+        localStorage.setItem("userName", data.nombre);
+        localStorage.setItem("userEmail", data.correo);
+
+        if (data.role === "docente") {
+          navigate("/docente");
         }
         else if (data.role === "estudiante") {
           navigate("/estudiante");

@@ -96,3 +96,44 @@ def obtener_tareas_controller():
     except Exception as e:
         print(f"Error al obtener tareas: {str(e)}")
         return jsonify({'error': f'Error al obtener tareas: {str(e)}'}), 500
+
+def update_tarea_controller(id):
+    try:
+        data = request.get_json()
+        print("Datos recibidos para update:", data)  # <--- AGREGA ESTO
+        tarea = Tarea.query.get(id)
+        if not tarea:
+            return jsonify({'error': 'Tarea no encontrada'}), 404
+        # Actualizar solo los campos enviados
+        for campo in ['titulo', 'descripcion', 'tipo_tarea', 'restricciones', 'codigo_plantilla', 'fecha_entrega', 'hora_entrega']:
+            if campo in data:
+                print(f"Actualizando campo {campo} con valor {data[campo]}")  # <--- AGREGA ESTO
+                if campo in ['fecha_entrega'] and data[campo]:
+                    tarea.fecha_entrega = datetime.strptime(data[campo], '%Y-%m-%d').date()
+                elif campo in ['hora_entrega'] and data[campo]:
+                    try:
+                        # Intenta con segundos
+                        tarea.hora_entrega = datetime.strptime(data[campo], '%H:%M:%S').time()
+                    except ValueError:
+                        # Si falla, intenta sin segundos
+                        tarea.hora_entrega = datetime.strptime(data[campo], '%H:%M').time()
+                else:
+                    setattr(tarea, campo, data[campo])
+        db.session.commit()
+        return jsonify({'message': 'Tarea actualizada exitosamente'}), 200
+    except Exception as e:
+        db.session.rollback()
+        print("Error en update_tarea_controller:", str(e))  # <--- AGREGA ESTO
+        return jsonify({'error': f'Error al actualizar la tarea: {str(e)}'}), 500
+
+def delete_tarea_controller(id):
+    try:
+        tarea = Tarea.query.get(id)
+        if not tarea:
+            return jsonify({'error': 'Tarea no encontrada'}), 404
+        db.session.delete(tarea)
+        db.session.commit()
+        return jsonify({'message': 'Tarea eliminada exitosamente'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': f'Error al eliminar la tarea: {str(e)}'}), 500

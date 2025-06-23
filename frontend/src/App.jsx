@@ -8,6 +8,7 @@ import PaginaCodigo from "./pages/paginaCodigo.jsx";
 import Layout from "./routes/Layout.jsx";
 import EstudiantePage from "./pages/EstudiantePage.jsx";
 import PaginaTareaDocente from "./pages/paginaTareaDocente.jsx";
+import PaginaTemaDocente from "./pages/paginaTemaDocente.jsx";
 
 import SeleccionRolModal from "./components/SeleccionRolModal";
 import RegistroEstudiante from "./pages/registro/RegistroEstudiante";
@@ -42,6 +43,7 @@ export default function App() {
           <Route path="paginaCodigo" element={<PaginaCodigo />}></Route>
           <Route path="page/estudiante" element={<EstudiantePage />}></Route>
           <Route path="paginaTareaDocente" element={<PaginaTareaDocente />} />
+          <Route path="docente/curso/:id" element={<PaginaTemaDocente />} />
           <Route
             path="registroProfesor"
             element={<RegistroProfesor onBackToHome={() => window.location.href = "/"} />}

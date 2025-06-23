@@ -14,3 +14,10 @@ class Tarea(db.Model):
     fecha_publicacion = db.Column(db.DateTime, default=func.now(), nullable=False)
     fecha_entrega = db.Column(db.Date, nullable=True)
     hora_entrega = db.Column(db.Time, nullable=True)
+
+    # NUEVO: Relación con Tema
+    id_tema = db.Column(db.Integer, db.ForeignKey("tema.id"), nullable=False)
+    tema = db.relationship("Tema", back_populates="tareas")
+
+    # NUEVO: Relación con Resolucion
+    resoluciones = db.relationship("Resolucion", back_populates="tarea")
