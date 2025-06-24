@@ -21,12 +21,17 @@ const opciones = [
   },
 ];
 
+const capitalizarPrimeraLetra = (texto) => {
+  return texto.charAt(0).toUpperCase() + texto.slice(1);
+};
+
 export default function PaginaTareaDocente() {
   const [titulo, setTitulo] = useState('');
   const [descripcion, setDescripcion] = useState('');
   const [tipoTarea, setTipoTarea] = useState('');
   const [open, setOpen] = useState(false);
   const selectRef = useRef(null);
+  const [errores, setErrores] = useState({});
   const [restricciones, setRestricciones] = useState([]); 
   const [codigo, setCodigo] = useState('');
   const [fechaEntrega, setFechaEntrega] = useState('');
@@ -50,11 +55,53 @@ export default function PaginaTareaDocente() {
 
   const selectedOption = opciones.find(opt => opt.value === tipoTarea);
 
-  const imprimirValores = () => {
-    console.log("Descripcion:", descripcion);
-    console.log("Tipo de Tarea:", tipoTarea);
-    console.log("Restricciones seleccionadas:", restricciones);
-    // console.log("Código de la plantilla:", codigo);
+  const validarFormulario = () => {
+    const nuevosErrores = {};
+
+    if (descripcion.trim().length < 10) {
+      nuevosErrores.descripcion = 'La descripción debe tener al menos 10 caracteres.';
+    }
+
+    if (!tipoTarea) {
+      nuevosErrores.tipoTarea = 'Debe seleccionar un tipo de tarea.';
+    }
+
+    if (tipoTarea === 'restricciones' && restricciones.length === 0) {
+      nuevosErrores.restricciones = 'Debe seleccionar al menos una restricción.';
+    }
+
+    if (tipoTarea === 'plantilla' && codigo.trim().length === 0) {
+      nuevosErrores.codigo = 'Debe ingresar el código de la plantilla.';
+    }
+
+    setErrores(nuevosErrores);
+    return Object.keys(nuevosErrores).length === 0;
+  };
+
+const limpiarFormulario = () => {
+    setTitulo('');
+    setDescripcion('');
+    setTipoTarea('');
+    setRestricciones([]);
+    setCodigo('');
+    setFechaEntrega('');
+    setHoraEntrega('');
+  };
+
+  const mostrarModal = (message, type = 'success') => {
+    setModal({
+      isOpen: true,
+      message,
+      type
+    });
+  };
+
+  const cerrarModal = () => {
+    setModal({
+      isOpen: false,
+      message: '',
+      type: 'success'
+    });
   };
 
   const limpiarFormulario = () => {
@@ -115,6 +162,8 @@ export default function PaginaTareaDocente() {
 
     setIsSubmitting(true);
 
+    if (!validarFormulario()) return;
+
     const datos = {
       titulo: titulo.trim(),
       descripcion: descripcion.trim(),
@@ -123,6 +172,7 @@ export default function PaginaTareaDocente() {
       codigo_plantilla: tipoTarea === 'plantilla' ? codigo : '',
       fecha_entrega: fechaEntrega,
       hora_entrega: horaEntrega
+      codigo
     };
 
     try {
@@ -143,6 +193,7 @@ export default function PaginaTareaDocente() {
         console.log('Respuesta exitosa:', jsonResponse);
         mostrarModal('La tarea se ha creado exitosamente.');
         limpiarFormulario();
+        alert('Tarea publicada exitosamente');
       } else {
         const errorData = await response.json().catch(() => ({}));
         console.error('Error en la respuesta:', errorData);
@@ -180,11 +231,14 @@ export default function PaginaTareaDocente() {
       <div className="mb-4">
         <label className="block text-gray-700 mb-2">Descripción:</label>
         <textarea
-          className="w-full h-24 p-2 border rounded bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
+          className="w-full h-24 p-3 border rounded bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
           value={descripcion}
-          onChange={e => setDescripcion(e.target.value)}
+          onChange={e => setDescripcion(capitalizarPrimeraLetra(e.target.value))}
           placeholder="Ingrese la descripción de la tarea"
         />
+        {errores.descripcion && (
+          <p className="text-red-600 text-sm mt-1">{errores.descripcion}</p>
+        )}
       </div>
 
       <div className="grid grid-cols-2 gap-4 mb-4">
@@ -211,7 +265,7 @@ export default function PaginaTareaDocente() {
 
       <div className="mb-4" ref={selectRef}>
         <label className="block text-gray-700 mb-2">Tipo de tarea:</label>
-        <div className="relative w-80">
+        <div className="relative w-96">
           <button
             type="button"
             className="w-full p-2 border rounded bg-gray-800 text-white flex justify-between items-center"
@@ -219,16 +273,23 @@ export default function PaginaTareaDocente() {
           >
             <span>{selectedOption ? selectedOption.label : '--Seleccionar--'}</span>
             <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            
             </svg>
           </button>
+
           {open && (
             <div className="absolute z-10 mt-2 w-full bg-white border rounded shadow-lg">
               {opciones.map(opt => (
                 <div
                   key={opt.value}
                   className={`p-3 cursor-pointer hover:bg-gray-100 ${tipoTarea === opt.value ? 'bg-gray-200' : ''}`}
-                  onClick={() => { setTipoTarea(opt.value); setOpen(false); }}
+                  onClick={() => {
+                    setTipoTarea(opt.value);
+                    setOpen(false);
+                    setErrores(prev => ({ ...prev, tipoTarea: undefined }));
+                  }}
                 >
                   <div className="font-medium text-gray-900">{opt.label}</div>
                   <div className="text-gray-500 text-sm">{opt.descripcion}</div>
@@ -237,20 +298,43 @@ export default function PaginaTareaDocente() {
             </div>
           )}
         </div>
+        {errores.tipoTarea && (
+          <p className="text-red-600 text-sm mt-1">{errores.tipoTarea}</p>
+        )}
       </div>
 
-      <div className="mt-8">
-        {tipoTarea === 'restricciones' && <TareaRestricciones setRestricciones={setRestricciones}/>}
-        {tipoTarea === 'plantilla' && <TareaPlantilla setCodigo={setCodigo} />}
+      {/* Componentes dinámicos */}
+      <div>
+        {tipoTarea === 'restricciones' && (
+          <>
+            <TareaRestricciones setRestricciones={setRestricciones} />
+            {errores.restricciones && (
+              <p className="text-red-600 text-sm mt-2">{errores.restricciones}</p>
+            )}
+          </>
+        )}
+
+        {tipoTarea === 'plantilla' && (
+          <>
+            <TareaPlantilla setCodigo={setCodigo} />
+            {errores.codigo && (
+              <p className="text-red-600 text-sm mt-2">{errores.codigo}</p>
+            )}
+          </>
+        )}
       </div>
 
-      <div className="flex space-x-4 mt-8 justify-end">
+      {/* Botones */}
+
+      <div className="flex space-x-4 justify-end">
         <button 
           className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 disabled:opacity-50"
           onClick={limpiarFormulario}
           disabled={isSubmitting}
         >
+          
           Cancelar
+        
         </button>
         <button
           className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-900 disabled:opacity-50"
@@ -269,4 +353,4 @@ export default function PaginaTareaDocente() {
       />
     </div>
   );
-} 
+}
