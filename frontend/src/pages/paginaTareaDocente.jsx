@@ -104,32 +104,6 @@ const limpiarFormulario = () => {
     });
   };
 
-  const limpiarFormulario = () => {
-    setTitulo('');
-    setDescripcion('');
-    setTipoTarea('');
-    setRestricciones([]);
-    setCodigo('');
-    setFechaEntrega('');
-    setHoraEntrega('');
-  };
-
-  const mostrarModal = (message, type = 'success') => {
-    setModal({
-      isOpen: true,
-      message,
-      type
-    });
-  };
-
-  const cerrarModal = () => {
-    setModal({
-      isOpen: false,
-      message: '',
-      type: 'success'
-    });
-  };
-
   const enviarDatos = async () => {
     if (isSubmitting) {
       return;
@@ -162,7 +136,10 @@ const limpiarFormulario = () => {
 
     setIsSubmitting(true);
 
-    if (!validarFormulario()) return;
+    if (!validarFormulario()) {
+      setIsSubmitting(false);
+      return;
+    }
 
     const datos = {
       titulo: titulo.trim(),
@@ -171,7 +148,7 @@ const limpiarFormulario = () => {
       restricciones: tipoTarea === 'restricciones' ? restricciones : [],
       codigo_plantilla: tipoTarea === 'plantilla' ? codigo : '',
       fecha_entrega: fechaEntrega,
-      hora_entrega: horaEntrega
+      hora_entrega: horaEntrega,
       codigo
     };
 
@@ -193,7 +170,6 @@ const limpiarFormulario = () => {
         console.log('Respuesta exitosa:', jsonResponse);
         mostrarModal('La tarea se ha creado exitosamente.');
         limpiarFormulario();
-        alert('Tarea publicada exitosamente');
       } else {
         const errorData = await response.json().catch(() => ({}));
         console.error('Error en la respuesta:', errorData);
