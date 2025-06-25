@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import SeleccionRolModal from "../SeleccionRolModal";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState(""); // Nuevo estado para contraseña
   const navigate = useNavigate();
   const profileImage = "/IconoPerfil.png";
+  const [showSeleccionRolModal, setShowSeleccionRolModal] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -104,10 +106,13 @@ export default function LoginForm() {
       </div>
 
       <div className="absolute top-4 right-4">
-        <button className="bg-yellow-500 text-white px-4 py-2 rounded-md">
+        <button className="bg-yellow-500 text-white px-4 py-2 rounded-md" onClick={() => setShowSeleccionRolModal(true)}>
           Registrate
         </button>
       </div>
+      {showSeleccionRolModal && (
+        <SeleccionRolModal onSeleccion={() => setShowSeleccionRolModal(false)} />
+      )}
     </div>
   );
 }

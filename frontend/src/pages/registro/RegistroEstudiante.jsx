@@ -97,7 +97,7 @@ export default function RegistroEstudiante({ onBackToHome }) {
     try {
       const payload = { ...formData };
       delete payload.confirmPassword;
-      const res = await fetch(`/estudiantes/registrar`, {
+      const res = await fetch('http://localhost:5000/estudiantes/registrar', {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
