@@ -6,6 +6,7 @@ from datetime import datetime
 def guardar_tarea_controller(request):
     try:
         data = request.get_json()
+        print("Procesando la creación de una nueva tarea...")
         print("Datos recibidos:", data)  # Para debugging
         
         # Validar datos requeridos
