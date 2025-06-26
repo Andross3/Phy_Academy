@@ -83,3 +83,33 @@ def crear_tarea_en_tema_controller():
     db.session.add(tarea)
     db.session.commit()
     return jsonify({'message': 'Tarea creada', 'tarea': {'id': tarea.id, 'titulo': tarea.titulo}}), 201
+
+def obtener_todos_los_cursos_controller():
+    cursos = Curso.query.all()
+    return jsonify([{
+        "id": c.id,
+        "nombre": c.nombre,
+        "descripcion": c.descripcion
+    } for c in cursos]), 200
+
+def update_curso_controller(id):
+    data = request.get_json()
+    curso = Curso.query.get(id)
+    if not curso:
+        return jsonify({"error": "Curso no encontrado"}), 404
+    nombre = data.get("nombre")
+    descripcion = data.get("descripcion")
+    if nombre is not None:
+        curso.nombre = nombre
+    if descripcion is not None:
+        curso.descripcion = descripcion
+    db.session.commit()
+    return jsonify({"message": "Curso actualizado"}), 200
+
+def delete_curso_controller(id):
+    curso = Curso.query.get(id)
+    if not curso:
+        return jsonify({"error": "Curso no encontrado"}), 404
+    db.session.delete(curso)
+    db.session.commit()
+    return jsonify({"message": "Curso eliminado"}), 200

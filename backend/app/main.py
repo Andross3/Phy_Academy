@@ -6,6 +6,7 @@ from backend.app.core.extensions import db
 from backend.app.routes.auth_routes import auth_bp
 from backend.app.routes.ejecutador_routes import ejecutador_bp
 from backend.app.routes.tareas_routes import tarea_bp
+from backend.app.routes.inscripcion_routes import inscripcion_bp
 from flask_migrate import Migrate
 from .models import *
 
@@ -28,6 +29,7 @@ app.register_blueprint(ejecutador_bp)
 app.register_blueprint(tarea_bp)
 app.register_blueprint(estudiante_bp)
 app.register_blueprint(docente_bp)
+app.register_blueprint(inscripcion_bp)
 
 @app.route("/health")
 def health_check():

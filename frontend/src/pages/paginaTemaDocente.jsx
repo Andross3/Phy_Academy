@@ -170,7 +170,7 @@ export default function PaginaTemaDocente() {
 
       {/* Modal para añadir tema */}
       {showTemaModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-30">
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-transparent">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
             <h2 className="text-lg font-bold mb-4">Añadir nuevo tema</h2>
             <input
@@ -190,7 +190,7 @@ export default function PaginaTemaDocente() {
 
       {/* Modal para añadir tarea */}
       {showTareaModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-30">
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-transparent">
           <div className="bg-white p-0 rounded-lg shadow-lg w-full max-w-xl">
             <FormularioTarea
               id_tema={temaSeleccionado}
