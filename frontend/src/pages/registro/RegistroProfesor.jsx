@@ -109,7 +109,7 @@ export default function RegistroProfesor({ onBackToHome }) {
       // Log para ver qué datos estás enviando
       console.log("Enviando datos:", docenteData);
 
-      const response = await fetch(`http://localhost:5000/api/docente/registrar`, {
+      const response = await fetch(`/api/docente/registrar`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",

@@ -125,7 +125,7 @@ export default function FormularioTarea({ id_tema, onSuccess, onCancel, modo = '
       let response;
       if (initialData && initialData.id) {
         // Modo edición
-        response = await fetch(`http://localhost:5000/api/tareas/${initialData.id}`, {
+        response = await fetch(`/api/tareas/${initialData.id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -135,7 +135,7 @@ export default function FormularioTarea({ id_tema, onSuccess, onCancel, modo = '
         });
       } else {
         // Modo creación
-        response = await fetch(id_tema ? 'http://localhost:5000/api/tarea' : 'http://localhost:5000/api/tareas', {
+        response = await fetch(id_tema ? `/api/tarea` : `/api/tareas`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

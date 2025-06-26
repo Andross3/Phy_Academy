@@ -77,7 +77,7 @@ export default function DocenteHome() {
     }
 
     // Cargar cursos
-    fetch(`http://localhost:5000/api/docente/${idDocente}/cursos`)
+    fetch(`/api/docente/${idDocente}/cursos`)
       .then(res => res.json())
       .then(data => {
         setCursos(Array.isArray(data) ? data : data.cursos);
@@ -169,7 +169,7 @@ export default function DocenteHome() {
             setMensaje("¡Curso creado exitosamente!");
             setTimeout(() => setMensaje(""), 3000);
             // Recarga cursos
-            fetch(`http://localhost:5000/api/docente/${idDocente}/cursos`)
+            fetch(`/api/docente/${idDocente}/cursos`)
               .then(res => res.json())
               .then(data => setCursos(Array.isArray(data) ? data : data.cursos));
           }}

@@ -17,34 +17,41 @@ def contiene_palabras_prohibidas(codigo, restricciones):
     return None
 
 def ejecutar_codigo(request):
-    datos = request.get_json()
-    codigo = datos.get('codigo')
-    tarea_id = datos.get('tarea_id')  
+    try:
+        datos = request.get_json()
+        codigo = datos.get('codigo')
+        tarea_id = datos.get('tarea_id')
 
-    tarea = Tarea.query.filter_by(id=tarea_id).first()
-    if not tarea:
-        return jsonify({'mensaje': 'Tarea no encontrada', 'autorizado': False})
+        tarea = Tarea.query.filter_by(id=tarea_id).first()
+        if not tarea:
+            return jsonify({'mensaje': 'Tarea no encontrada', 'autorizado': False})
 
-    restricciones = tarea.restricciones
+        restricciones = tarea.restricciones or []
+        palabra_detectada = contiene_palabras_prohibidas(codigo, restricciones)
 
-    palabra_detectada = contiene_palabras_prohibidas(codigo, restricciones)
-    if palabra_detectada:
-        return jsonify({
-            'mensaje': f"El código contiene una palabra reservada no permitida: '{palabra_detectada}'",
-            'autorizado': False
-        })
+        if palabra_detectada:
+            return jsonify({
+                'mensaje': f"El código contiene una palabra reservada no permitida: '{palabra_detectada}'",
+                'autorizado': False
+            })
 
-    sandbox_prueba = Sandbox(1, codigo)
-    sandbox_prueba.correr_codigo()
-    sandbox_prueba.crear_pool()
-    output_codigo = sandbox_prueba.respuesta()
-    mensaje = output_codigo.get('stdout','')
-    mensajeError = output_codigo.get('stderr','')
-    if mensaje != "":
-        return jsonify({'mensaje': mensaje}), 200
-    else:
-        mensajeBonito = formatoErrores(mensajeError)
-        return jsonify({'mensaje': mensajeBonito}), 200
+        sandbox_prueba = Sandbox(1, codigo)
+        sandbox_prueba.correr_codigo()
+        sandbox_prueba.crear_pool()
+        output_codigo = sandbox_prueba.respuesta()
+        mensaje = output_codigo.get('stdout', '')
+        mensajeError = output_codigo.get('stderr', '')
+
+        if mensaje:
+            return jsonify({'mensaje': mensaje}), 200
+        else:
+            mensajeBonito = formatoErrores(mensajeError)
+            return jsonify({'mensaje': mensajeBonito}), 200
+
+    except Exception as e:
+        print("Error en ejecutar_codigo:", e)
+        return jsonify({'mensaje': f"Error interno del servidor: {str(e)}"}), 500
+
 
 def formatoErrores(texto_error_capturado):
     lineas_error = re.findall(r'File ".*", line (\d+)', texto_error_capturado)

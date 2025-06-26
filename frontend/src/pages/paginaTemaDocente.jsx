@@ -64,13 +64,13 @@ export default function PaginaTemaDocente() {
 
   // Cargar datos del curso y temas
   useEffect(() => {
-    fetch(`http://localhost:5000/api/docente/${localStorage.getItem('userId')}/cursos`)
+    fetch(`/api/docente/${localStorage.getItem('userId')}/cursos`)
       .then(res => res.json())
       .then(data => {
         const cursoData = (Array.isArray(data) ? data : data.cursos).find(c => c.id === parseInt(id));
         setCurso(cursoData);
       });
-    fetch(`http://localhost:5000/api/curso/${id}/temas`)
+    fetch(`/api/curso/${id}/temas`)
       .then(res => res.json())
       .then(data => setTemas(data.temas || []));
   }, [id]);
@@ -78,7 +78,7 @@ export default function PaginaTemaDocente() {
   // Añadir tema
   const handleAddTema = async () => {
     if (!nuevoTema.trim()) return;
-    const res = await fetch('http://localhost:5000/api/tema', {
+    const res = await fetch('/api/tema', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id_curso: id, nombre: nuevoTema })
@@ -86,7 +86,7 @@ export default function PaginaTemaDocente() {
     if (res.ok) {
       setNuevoTema('');
       setShowTemaModal(false);
-      fetch(`http://localhost:5000/api/curso/${id}/temas`).then(r => r.json()).then(data => setTemas(data.temas || []));
+      fetch(`/api/curso/${id}/temas`).then(r => r.json()).then(data => setTemas(data.temas || []));
       setModal({ isOpen: true, message: 'Tema creado exitosamente', type: 'success' });
     } else {
       setModal({ isOpen: true, message: 'Error al crear tema', type: 'error' });
@@ -97,7 +97,7 @@ export default function PaginaTemaDocente() {
   const handleAddTarea = async () => {
     const { titulo, descripcion, tipo_tarea, fecha_entrega, hora_entrega } = nuevaTarea;
     if (!titulo || !descripcion || !tipo_tarea || !fecha_entrega || !hora_entrega) return;
-    const res = await fetch('http://localhost:5000/api/tarea', {
+    const res = await fetch('/api/tarea', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...nuevaTarea, id_tema: temaSeleccionado })
@@ -105,7 +105,7 @@ export default function PaginaTemaDocente() {
     if (res.ok) {
       setNuevaTarea({ titulo: '', descripcion: '', tipo_tarea: '', fecha_entrega: '', hora_entrega: '' });
       setShowTareaModal(false);
-      fetch(`http://localhost:5000/api/curso/${id}/temas`).then(r => r.json()).then(data => setTemas(data.temas || []));
+      fetch(`/api/curso/${id}/temas`).then(r => r.json()).then(data => setTemas(data.temas || []));
       setModal({ isOpen: true, message: 'Tarea creada exitosamente', type: 'success' });
     } else {
       setModal({ isOpen: true, message: 'Error al crear tarea', type: 'error' });
@@ -113,9 +113,9 @@ export default function PaginaTemaDocente() {
   };
 
   const handleDeleteTarea = async (tareaId) => {
-    const res = await fetch(`http://localhost:5000/api/tareas/${tareaId}`, { method: 'DELETE' });
+    const res = await fetch(`/api/tareas/${tareaId}`, { method: 'DELETE' });
     if (res.ok) {
-      fetch(`http://localhost:5000/api/curso/${id}/temas`).then(r => r.json()).then(data => setTemas(data.temas || []));
+      fetch(`/api/curso/${id}/temas`).then(r => r.json()).then(data => setTemas(data.temas || []));
       setModal({ isOpen: true, message: 'Tarea eliminada exitosamente', type: 'success' });
     } else {
       setModal({ isOpen: true, message: 'Error al eliminar tarea', type: 'error' });
@@ -196,7 +196,7 @@ export default function PaginaTemaDocente() {
               id_tema={temaSeleccionado}
               onSuccess={() => {
                 setShowTareaModal(false);
-                fetch(`http://localhost:5000/api/curso/${id}/temas`).then(r => r.json()).then(data => setTemas(data.temas || []));
+                fetch(`/api/curso/${id}/temas`).then(r => r.json()).then(data => setTemas(data.temas || []));
                 setModal({ isOpen: true, message: 'Tarea creada exitosamente', type: 'success' });
               }}
               onCancel={() => setShowTareaModal(false)}
@@ -214,7 +214,7 @@ export default function PaginaTemaDocente() {
               initialData={editTarea}
               onSuccess={() => {
                 setEditTarea(null);
-                fetch(`http://localhost:5000/api/curso/${id}/temas`).then(r => r.json()).then(data => setTemas(data.temas || []));
+                fetch(`/api/curso/${id}/temas`).then(r => r.json()).then(data => setTemas(data.temas || []));
                 setModal({ isOpen: true, message: 'Tarea editada exitosamente', type: 'success' });
               }}
               onCancel={() => setEditTarea(null)}

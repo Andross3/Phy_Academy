@@ -6,7 +6,7 @@ const ArchivoCompilador = ({ onSeleccionarTarea }) => {
 
   useEffect(() => {
     // Cargar tareas desde el backend
-    fetch("http://localhost:5000/api/tareas")
+    fetch(`/api/tareas`)
       .then(res => {
         if (!res.ok) throw new Error("Error al obtener tareas");
         return res.json();
