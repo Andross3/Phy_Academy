@@ -4,7 +4,7 @@ export default function CatalogoCursos() {
   const [cursosTotales, setCursosTotales] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/cursos') // Ajusta la ruta si tu endpoint cambia
+    fetch(`/api/cursos`) // Ajusta la ruta si tu endpoint cambia
       .then(res => res.json())
       .then(data => {
         setCursosTotales(data.cursos || data);
@@ -13,7 +13,7 @@ export default function CatalogoCursos() {
 
   const inscribirse = async (idCurso) => {
     const idEstudiante = localStorage.getItem("userId");
-    const res = await fetch("http://localhost:5000/inscripciones/inscribir", {
+    const res = await fetch(`/inscripciones/inscribir`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id_estudiante: idEstudiante, id_curso: idCurso })

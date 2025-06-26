@@ -144,7 +144,7 @@ export default function EstudianteHome() {
 
   // NUEVO: Fetch de todos los cursos
   useEffect(() => {
-    fetch('http://localhost:5000/api/cursos') // Ajusta la ruta si tu endpoint cambia
+    fetch(`/api/cursos`) // Ajusta la ruta si tu endpoint cambia
       .then(res => res.json())
       .then(data => {
         // Si tu endpoint devuelve { cursos: [...] }
@@ -155,7 +155,7 @@ export default function EstudianteHome() {
   // NUEVO: Función para inscribirse
   const inscribirse = async (idCurso) => {
     const idEstudiante = localStorage.getItem("userId");
-    const res = await fetch("http://localhost:5000/inscripciones/inscribir", {
+    const res = await fetch(`/inscripciones/inscribir`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id_estudiante: idEstudiante, id_curso: idCurso })
@@ -174,7 +174,7 @@ export default function EstudianteHome() {
 
   useEffect(() => {
     if (!idEstudiante) return;
-    fetch(`http://localhost:5000/inscripciones/estudiante/${idEstudiante}/cursos`)
+    fetch(`/inscripciones/estudiante/${idEstudiante}/cursos`)
       .then(res => res.json())
       .then(data => setMisCursos(Array.isArray(data) ? data : data.cursos || []));
   }, [idEstudiante]);

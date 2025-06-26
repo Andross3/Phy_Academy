@@ -56,14 +56,14 @@ export default function PaginaTemaEstudiante() {
 
   useEffect(() => {
     // Opcional: obtener datos del curso (nombre, descripción)
-    fetch(`http://localhost:5000/api/cursos`)
+    fetch(`/api/cursos`)
       .then(res => res.json())
       .then(data => {
         const cursoData = (Array.isArray(data) ? data : data.cursos).find(c => c.id === parseInt(id));
         setCurso(cursoData);
       });
     // Obtener temas y tareas
-    fetch(`http://localhost:5000/api/curso/${id}/temas`)
+    fetch(`/api/curso/${id}/temas`)
       .then(res => res.json())
       .then(data => setTemas(data.temas || []));
   }, [id]);

@@ -102,7 +102,7 @@ export default function DocenteHome() {
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     if (!editCurso) return;
-    const res = await fetch(`http://localhost:5000/api/curso/${editCurso.id}`, {
+    const res = await fetch(`/api/curso/${editCurso.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ nombre: editNombre, descripcion: editDescripcion })
@@ -113,7 +113,7 @@ export default function DocenteHome() {
       setEditDescripcion("");
       setMensaje("Curso editado exitosamente");
       setTimeout(() => setMensaje(""), 3000);
-      fetch(`http://localhost:5000/api/docente/${idDocente}/cursos`)
+      fetch(`/api/docente/${idDocente}/cursos`)
         .then(res => res.json())
         .then(data => setCursos(Array.isArray(data) ? data : data.cursos));
     }
@@ -122,14 +122,14 @@ export default function DocenteHome() {
   // Eliminar curso
   const handleDeleteCurso = async () => {
     if (!deleteCurso) return;
-    const res = await fetch(`http://localhost:5000/api/curso/${deleteCurso.id}`, {
+    const res = await fetch(`/api/curso/${deleteCurso.id}`, {
       method: "DELETE"
     });
     if (res.ok) {
       setDeleteCurso(null);
       setMensaje("Curso eliminado exitosamente");
       setTimeout(() => setMensaje(""), 3000);
-      fetch(`http://localhost:5000/api/docente/${idDocente}/cursos`)
+      fetch(`/api/docente/${idDocente}/cursos`)
         .then(res => res.json())
         .then(data => setCursos(Array.isArray(data) ? data : data.cursos));
     }

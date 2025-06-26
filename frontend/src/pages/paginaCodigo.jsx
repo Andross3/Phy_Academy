@@ -27,7 +27,7 @@ const PaginaCodigo = () => {
 
   useEffect(() => {
     if (tareaId) {
-      fetch(`http://localhost:5000/api/tareas/${tareaId}`)
+      fetch(`/api/tareas/${tareaId}`)
         .then(res => res.json())
         .then(data => {
           setTarea(data);
@@ -46,7 +46,7 @@ const PaginaCodigo = () => {
       setResultado("Selecciona una tarea antes de compilar.");
       return;
     }
-    fetch("http://127.0.0.1:5000/ejecutar", {
+    fetch(`/ejecutar`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -85,7 +85,7 @@ const PaginaCodigo = () => {
   };
 
   const manejarVariables = () => {
-    fetch("http://127.0.0.1:5000/extraer-variables", {
+    fetch(`/extraer-variables`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
