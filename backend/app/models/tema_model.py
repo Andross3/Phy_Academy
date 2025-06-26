@@ -10,4 +10,4 @@ class Tema(db.Model):
     notas = db.Column(db.Text)
 
     curso = db.relationship("Curso", back_populates="temas")
-    ejercicios = db.relationship("Ejercicio", back_populates="tema")
+    tareas = db.relationship("Tarea", back_populates="tema")

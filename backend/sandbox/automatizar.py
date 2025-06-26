@@ -6,7 +6,7 @@ class Compilar_Codigo:
 
     def __init__(self, string_codigo):
         self.codigo = string_codigo
-        self.archivo_py = 'pepe.py'
+        self.archivo_py = 'user.py'
 
     def convertir(self):
         carpeta_destino = "backend/sandbox/archivos_compilacion"

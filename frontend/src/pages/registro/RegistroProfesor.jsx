@@ -103,26 +103,38 @@ export default function RegistroProfesor({ onBackToHome }) {
       const { password, ...rest } = formData;
       const docenteData = {
         ...rest,
-        contrasena: password, // Este campo debe coincidir con el nombre esperado en el backend
+        contrasena: password,
       };
 
-      const response = await fetch(`/docentes/registrar`, {
+      // Log para ver qué datos estás enviando
+      console.log("Enviando datos:", docenteData);
+
+      const response = await fetch(`/api/docente/registrar`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
         body: JSON.stringify(docenteData),
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        alert(data.mensaje || "Registro exitoso. ¡Bienvenido a PhyAcademy!");
-        onBackToHome();
-      } else {
-        alert(data.error || "Hubo un error al registrar al docente.");
+      // Log para ver la respuesta
+      console.log("Status:", response.status);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.log("Error response:", errorText);
+        throw new Error(errorText || "Error al registrar el docente");
       }
+
+      const data = await response.json();
+      console.log("Respuesta exitosa:", data);
+      
+      alert(data.mensaje || "Registro exitoso. ¡Bienvenido a PhyAcademy!");
+      onBackToHome();
     } catch (error) {
-      console.error("Error en la solicitud:", error);
-      alert("Error al conectar con el servidor.");
+      console.error("Error completo:", error);
+      alert(error.message || "Error al conectar con el servidor.");
     }
   };
 
@@ -297,7 +309,7 @@ export default function RegistroProfesor({ onBackToHome }) {
             </div>
             
             <button 
-              onClick={handleSubmit}
+              type="submit"
               className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md transition-colors shadow-lg"
             >
               Registrarse
