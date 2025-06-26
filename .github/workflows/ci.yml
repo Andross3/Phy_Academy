@@ -3,10 +3,10 @@ name: CI - Phy Academy
 on:
   push:
     branches: 
-      - juan_compilar_codigo_estudiante
+      - main
   pull_request:
     branches:
-      - juan_compilar_codigo_estudiante
+      - main
   workflow_dispatch:
 
 jobs:
