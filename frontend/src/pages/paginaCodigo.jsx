@@ -1,117 +1,130 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ResultadoCompilacion from "../components/resultadoCompilacion";
-import BotonCompilar from "../components/botonCompilar";
+import BotonCompilar from '../components/botonCompilar';
 import EntradaCodigo from "../components/entradaCodigo";
 import ArchivoCompilador from "../components/archivoCompilador";
+import BarraFunciones from "../components/barraFunciones";
+import VariablesPanel from "../components/variablesPanel";
 
 const PaginaCodigo = () => {
-  const [resultado, setResultado] = useState("");
-  const [codigo, setCodigo] = useState("");
-  const [pyodide, setPyodide] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [resultado, setResultado] = useState('');
+  const [codigo, setCodigo] = useState('');
+  const [variables, setVariables] = useState([]); 
+  // rodrigo
+  const [titulo, setTitulo] = useState('Tarea 1');
+  const [descripcion, setDescripcion] = useState('Hacer un programa que te devuelva ¡Hola Mundo!');
+  const [restricciones, setRestricciones] = useState([]);
+  const [codigoPlantilla, setCodigoPlantilla] = useState('');
+  const [tareaSeleccionada, setTareaSeleccionada] = useState(null);
 
-// Añade función para cargar pyodide desde global
-const loadPyodideFromWindow = () => window.loadPyodide();
-
-useEffect(() => {
-  async function initPyodide() {
-    try {
-      setLoading(true);
-      const py = await loadPyodideFromWindow();
-      setPyodide(py);
-    } catch (e) {
-      console.error("Error cargando Pyodide:", e);
-      setResultado("Error cargando Pyodide");
-    } finally {
-      setLoading(false);
-    }
+  const manejarCompilacion = () => {
+  if (!tareaSeleccionada?.id) {
+    setResultado("Selecciona una tarea antes de compilar.");
+    return;
   }
-  initPyodide();
-}, []);
+  fetch(`/ejecutar`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    codigo,
+    tarea_id: tareaSeleccionada.id
+  })
+})
+    .then(res => res.json())
+    .then(data => setResultado(data.mensaje))
+    .catch(err => setResultado("Error al conectar: " + err.message));
+};
 
-  useEffect(() => {
-    async function initPyodide() {
-      try {
-        setLoading(true);
-        const py = await loadPyodide();
-        setPyodide(py);
-      } catch (e) {
-        console.error("Error cargando Pyodide:", e);
-        setResultado("Error cargando Pyodide");
-      } finally {
-        setLoading(false);
-      }
-    }
-    initPyodide();
-  }, []);
 
-  const manejarCompilacion = async () => {
-    if (!pyodide) {
-      setResultado("Pyodide no está cargado aún.");
-      return;
-    }
-    try {
-      // Para evitar errores con código vacío
-      if (!codigo.trim()) {
-        setResultado("Por favor escribe algo de código.");
-        return;
-      }
-      // Ejecuta el código Python capturando salida y errores
-      const script = `
-import sys
-import io
+  const manejarSeleccionTarea = (idTarea) => {
+    fetch(`/api/tareas/${idTarea}`)
+      .then(async res => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data?.error || "Error al obtener tarea");
 
-stdout = io.StringIO()
-stderr = io.StringIO()
-sys.stdout = stdout
-sys.stderr = stderr
+        setTitulo(data.titulo || "Sin título");
+        setDescripcion(data.descripcion || "");
+        setRestricciones(data.restricciones || []);
+        setCodigoPlantilla(data.codigo_plantilla || "");
+        setCodigo(data.tipo_tarea === "plantilla" ? data.codigo_plantilla : "");
+        setTareaSeleccionada(data);
+      })
+      .catch(err => {
+        setTitulo("Error al cargar tarea");
+        setDescripcion(err.message);
+        setRestricciones([]);
+        setCodigoPlantilla("");
+        setCodigo("");
+        setTareaSeleccionada(null);
+      });
+  };
 
-try:
-${codigo
-  .split("\n")
-  .map(line => "    " + line)
-  .join("\n")}
-except Exception as e:
-    print(e, file=sys.stderr)
+    const manejarVariables = () => {
+    // console.log(codigo);
+    fetch(`/extraer-variables`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ codigo })
+    })
+      .then(response => response.json())
+      .then(data => {
+        setVariables(data.variables);
+        console.log("Variables extraídas:", data.variables);
+      })
+      .catch(error => {
+        console.error("Error al conectar con el backend:", error.message);
+        setVariables([]);
+      });
 
-sys.stdout = sys.__stdout__
-sys.stderr = sys.__stderr__
 
-stdout.getvalue(), stderr.getvalue()
-      `;
-
-      const [stdout, stderr] = await pyodide.runPythonAsync(script);
-
-      if (stderr) setResultado(`Error:\n${stderr}`);
-      else setResultado(stdout || "El código no produjo salida.");
-    } catch (error) {
-      setResultado(`Error ejecutando código:\n${error.message}`);
-    }
   };
 
   return (
-    <div className="p-6 text-white">
-      <div className="flex flex-col items-center w-full">
-        <h1 className="text-3xl font-bold mb-2 underline text-center">Tarea 1</h1>
-        <p className="mb-2 pl-10 text-white text-xl text-left italic w-full">
-          Hacer un programa que te devuelva ¡Hola Mundo!
-        </p>
-      </div>
+    <div className="p-2 text-white">
+      <div className="flex flex-col w-full pb-4 px-4">
+        <h1 className="text-3xl font-bold mb-2 underline text-center text-white">{titulo}</h1>
+        
+        <div className="bg-gray-800 rounded-lg p-4 text-white shadow-md mb-2">
+          <p className="text-xl italic mb-2">{descripcion}</p>
 
-      <div className="flex justify-end mb-4">
-        <BotonCompilar onCompilar={manejarCompilacion} />
-      </div>
+          {restricciones.length > 0 && (
+            <div className="mt-4">
+              <h2 className="text-lg font-semibold underline">Restricciones:</h2>
+              <ul className="list-disc list-inside ml-4 mt-1 text-white">
+                {restricciones.map((r, i) => (
+                  <li key={i}>{r}</li>
+                ))}
+              </ul>
+            </div>
+          )}
 
-      {loading && <p>Cargando entorno Python en el navegador...</p>}
-
-      <div className="grid grid-cols-[1fr_2fr] gap-4">
-        <div className="w-full">
-          <ArchivoCompilador />
+          {codigoPlantilla && (
+            <div className="mt-4">
+              <h2 className="text-lg font-semibold underline mb-1">Código Plantilla:</h2>
+              <pre className="bg-black rounded-md p-3 overflow-x-auto whitespace-pre-wrap text-sm text-green-400">{codigoPlantilla}</pre>
+            </div>
+          )}
         </div>
-        <div className="w-full">
-          <EntradaCodigo onChangeCode={setCodigo} />
+      </div>
+
+      <div className="grid grid-cols-[300px_1fr_300px] gap-2">
+        <div className="row-span-3">
+          <ArchivoCompilador onSeleccionarTarea={manejarSeleccionTarea} />
+        </div>
+
+        <div className="flex flex-col gap-3">
+          <BarraFunciones onCompilar={manejarCompilacion} onExtraerVariables={manejarVariables}/>
+          <EntradaCodigo onChangeCode={setCodigo} codigo={codigo} />
           <ResultadoCompilacion resultado={resultado} />
         </div>
+
+        <div className="row-span-3 flex flex-col gap-2">
+          <VariablesPanel variables={variables} />
+        </div>
+
+
       </div>
     </div>
   );
